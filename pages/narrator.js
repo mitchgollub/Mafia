@@ -13,6 +13,8 @@ export default class Mafia extends Component {
             config: {
                 Cop: 1,
                 Mafia: 2,
+                Doctor: 1,
+                TownWatch: 1,
                 Townsfolk: 3
             }
         }
@@ -76,6 +78,18 @@ export default class Mafia extends Component {
                             Mafia
                         <input type="number" size="2" min="1" max="10"
                                 name="Mafia" value={this.state.config.Mafia} onChange={this.handleChange}
+                                disabled={this.state.started} required />
+                        </label>
+                        <label>
+                            Doctor
+                        <input type="number" size="2" min="0" max="10"
+                                name="Doctor" value={this.state.config.Doctor} onChange={this.handleChange}
+                                disabled={this.state.started} required />
+                        </label>
+                        <label>
+                            Town Watch
+                        <input type="number" size="2" min="0" max="10"
+                                name="TownWatch" value={this.state.config.TownWatch} onChange={this.handleChange}
                                 disabled={this.state.started} required />
                         </label>
                         <label>

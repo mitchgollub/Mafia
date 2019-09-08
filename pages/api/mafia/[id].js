@@ -8,6 +8,9 @@ export default async (req, res) => {
 
     const players = JSON.parse(resp[0].players)
 
+    // TODO: CHECK IF PLAYER'S NAME ALREADY EXISTS IN CASE OF REFRESH
+    // TODO: USE VERSIONING SYSTEM TO PREVENT RACE CONDITIONS
+
     const index = Math.floor(Math.random() * (players.available.length))
     const selected = players.available[index]
     players.available.splice(index, 1);

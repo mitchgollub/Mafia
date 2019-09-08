@@ -2,6 +2,8 @@ const db = require('../../../lib/db');
 const escape = require('sql-template-strings')
 
 export default async (req, res) => {
+
+    // TODO: MAKE A FOREIGN KEY ON THIS IDENTIFIER
     var result = '';
     var characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
     var charactersLength = characters.length;
@@ -19,6 +21,12 @@ export default async (req, res) => {
     }
     for (let index = 0; index < cleanedConfig.Mafia; index++) {
         availableString.push("Mafia")
+    }
+    for (let index = 0; index < cleanedConfig.Doctor; index++) {
+        availableString.push("Doctor")
+    }
+    for (let index = 0; index < cleanedConfig.TownWatch; index++) {
+        availableString.push("Town Watch")
     }
     for (let index = 0; index < cleanedConfig.Townsfolk; index++) {
         availableString.push("Townsfolk")
@@ -43,6 +51,8 @@ export default async (req, res) => {
 function cleanInput(config) {
     config.Cop = cleanNumber(config.Cop);
     config.Mafia = cleanNumber(config.Mafia);
+    config.Doctor = cleanNumber(config.Doctor);
+    config.TownWatch = cleanNumber(config.TownWatch);
     config.Townsfolk = cleanNumber(config.Townsfolk);
     return config;
 }
