@@ -19,7 +19,6 @@ export default class MafiaContainer extends Component {
             })
         });
         const state = await res.json()
-        console.log(state)
         this.setState(state);
     }
 
