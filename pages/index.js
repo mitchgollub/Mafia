@@ -1,8 +1,10 @@
 import Link from 'next/link';
+import Header from '../components/header'
 
 function Index() {
     return (
         <div>
+            <Header />
             <div className={'container'}>
                 <div className={'flex-item__grow'}></div>
                 <div className={'flex-item'}>
@@ -18,31 +20,6 @@ function Index() {
                 </div>
                 <div className={'flex-item__grow'}></div>
             </div>
-
-            <style jsx>{`
-                body {
-                    background-color: yellow;
-                }
-                .button {
-                    background-color: pink;
-                    padding: 20px;
-                    margin: 20px;
-                    text-align: center;
-                }
-                .container {
-                    display: flex;
-                }
-                .container-column {
-                    display: flex;
-                    flex-direction: column;
-                }
-                .flex-item {
-                    flex: auto;
-                }
-                .flex-item__grow {
-                    flex-grow: 1;
-                }
-                `}</style>
         </div>
     );
 }

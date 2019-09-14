@@ -9,6 +9,7 @@
   "dependencies": {
     "express": "^4.17.1",
     "next": "latest",
+    "prop-types": "^15.7.2",
     "react": "^16.8.6",
     "react-dom": "^16.8.6",
     "serverless-mysql": "^1.5.1",
