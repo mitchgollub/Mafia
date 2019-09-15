@@ -30,10 +30,12 @@ class Join extends React.Component {
                     Enter Name
                 <input type="text" value={this.state.name} onChange={this.handleNameChange} />
                 </label>
+                <br />
                 <label>
                     Enter Game Code
                 <input type="text" value={this.state.code} onChange={this.handleCodeChange} />
                 </label>
+                <br />
                 <input type="submit" value="Submit" />
             </form>
         );

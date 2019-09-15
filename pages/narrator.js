@@ -59,7 +59,7 @@ export default class Mafia extends Component {
 
     render() {
         return (
-            <div className={'margin'}>
+            <div className={'margin'} style={{textAlign: 'center'}}>
                 <Header />
                 You are the Narrator.  You understand the rules of the game and will direct players as they play.
                 <br />
@@ -106,15 +106,17 @@ export default class Mafia extends Component {
                 </div>
                 <br />
                 <br />
-                <div style={!this.state.started ? { display: 'none' } : {}}>
-                    <span>Others can join your game using this code: <b>{this.state.game.code}</b></span>
-                    <br />
-                    <br />
-                    <button onClick={this.checkGameStatus}>Refresh</button>
-                    <span>Players are listed below:</span>
-                    {this.state.game.players.map(player => (
-                        <div key={player.id}>{player.role}: {player.name}</div>
-                    ))}
+                <div className={'container-column'} style={!this.state.started ? { display: 'none' } : {}}>
+                    <div className={'flex-item container-column container__align-center'}>
+                        <span className={'flex-item'}>Others can join your game using this code: <b>{this.state.game.code}</b></span>
+                        <div className={'flex-item'}>
+                            <span>Players are listed below:</span>
+                            {this.state.game.players.map(player => (
+                                <div key={player.id}>{player.role}: {player.name}</div>
+                            ))}
+                        </div>
+                        <button className={'button flex-item'} onClick={this.checkGameStatus}>Refresh</button>
+                    </div>
                 </div>
             </div>
         );
