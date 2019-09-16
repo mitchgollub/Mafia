@@ -22,8 +22,9 @@ export default class Mafia extends Component {
 
     handleChange(event) {
         const update = this.state.roles;
-        update[event.target.name] = event.target.value;
-        this.setState({ config: update });
+        const targetIndex = update.findIndex(role => role.role === event.target.name);
+        update[targetIndex].startingValue = event.target.value;
+        this.setState({ roles: update });
     }
 
     handleSubmit(event) {
