@@ -1,6 +1,7 @@
 import React, { Component } from 'react'
 import Header from '../components/header'
 import RoleField from '../components/roleField'
+import Roles from '../configuration/roles.json'
 
 export default class Mafia extends Component {
     constructor(props) {
@@ -11,13 +12,7 @@ export default class Mafia extends Component {
                 code: "",
                 players: []
             },
-            config: {
-                Cop: 1,
-                Mafia: 2,
-                Doctor: 1,
-                TownWatch: 1,
-                Townsfolk: 3
-            }
+            roles: Roles
         }
 
         this.handleChange = this.handleChange.bind(this);
@@ -26,7 +21,7 @@ export default class Mafia extends Component {
     }
 
     handleChange(event) {
-        const update = this.state.config;
+        const update = this.state.roles;
         update[event.target.name] = event.target.value;
         this.setState({ config: update });
     }
@@ -41,7 +36,7 @@ export default class Mafia extends Component {
                 'Accept': 'application/json',
                 'Content-Type': 'application/json'
             },
-            body: JSON.stringify(this.state.config)
+            body: JSON.stringify(this.state.roles)
         })
             .then(res => res.json()
                 .then((game) => {
@@ -59,48 +54,23 @@ export default class Mafia extends Component {
 
     render() {
         return (
-            <div className={'margin'} style={{textAlign: 'center'}}>
+            <div className={'margin'} style={{ textAlign: 'center' }}>
                 <Header />
                 You are the Narrator.  You understand the rules of the game and will direct players as they play.
                 <br />
                 <br />
                 <div>
                     <form onSubmit={this.handleSubmit} className={'container-column container__align-center'}>
-                        <RoleField
-                            role={'Cops'}
-                            roleName={'Cop'}
-                            value={this.state.config.Cop}
-                            started={this.state.started}
-                            handleChange={this.handleChange}>
-                        </RoleField>
-                        <RoleField
-                            role={'Mafia'}
-                            roleName={'Mafia'}
-                            value={this.state.config.Mafia}
-                            started={this.state.started}
-                            handleChange={this.handleChange}>
-                        </RoleField>
-                        <RoleField
-                            role={'Doctors'}
-                            roleName={'Doctor'}
-                            value={this.state.config.Doctor}
-                            started={this.state.started}
-                            handleChange={this.handleChange}>
-                        </RoleField>
-                        <RoleField
-                            role={'Town Watch'}
-                            roleName={'TownWatch'}
-                            value={this.state.config.TownWatch}
-                            started={this.state.started}
-                            handleChange={this.handleChange}>
-                        </RoleField>
-                        <RoleField
-                            role={'Townsfolk'}
-                            roleName={'Townsfolk'}
-                            value={this.state.config.Townsfolk}
-                            started={this.state.started}
-                            handleChange={this.handleChange}>
-                        </RoleField>
+                        {this.state.roles.map(role => (
+                            <RoleField
+                                key={role.role}
+                                role={role.role}
+                                roleName={role.roleName}
+                                value={role.startingValue}
+                                started={this.state.started}
+                                handleChange={this.handleChange}>
+                            </RoleField>
+                        ))}
                         <input className={'button'} type="submit" value="Submit" disabled={this.state.started} />
                     </form>
                 </div>

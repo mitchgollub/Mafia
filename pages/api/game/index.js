@@ -10,27 +10,17 @@ export default async (req, res) => {
     for (var i = 0; i < 4; i++) {
         result += characters.charAt(Math.floor(Math.random() * charactersLength));
     }
-    console.log(req.body)
-    const config = req.body;
+    console.log(`request: ${req.body}`)
+    const roles = req.body;
 
-    const cleanedConfig = cleanInput(config);
-
+    const cleanedRoles = cleanInput(roles);
     const availableString = []
-    for (let index = 0; index < cleanedConfig.Cop; index++) {
-        availableString.push("Cop")
-    }
-    for (let index = 0; index < cleanedConfig.Mafia; index++) {
-        availableString.push("Mafia")
-    }
-    for (let index = 0; index < cleanedConfig.Doctor; index++) {
-        availableString.push("Doctor")
-    }
-    for (let index = 0; index < cleanedConfig.TownWatch; index++) {
-        availableString.push("Town Watch")
-    }
-    for (let index = 0; index < cleanedConfig.Townsfolk; index++) {
-        availableString.push("Townsfolk")
-    }
+    cleanedRoles.map(role => {
+        // TODO: Need concept of roleName for user display (singular and plural forms)
+        for (let index = 0; index < role.startingValue; index++) {
+            availableString.push(role.role)
+        }
+    });
 
     const available = []
     for (let index = 0; index < availableString.length; index++) {
@@ -48,21 +38,28 @@ export default async (req, res) => {
     res.status(200).json({ game: { code: result, players: players.current } });
 }
 
-function cleanInput(config) {
-    config.Cop = cleanNumber(config.Cop);
-    config.Mafia = cleanNumber(config.Mafia);
-    config.Doctor = cleanNumber(config.Doctor);
-    config.TownWatch = cleanNumber(config.TownWatch);
-    config.Townsfolk = cleanNumber(config.Townsfolk);
-    return config;
+function cleanInput(roles) {
+    return roles.map(role => {
+        return {
+            role: role.role,
+            roleName: role.roleName,
+            startingValue: cleanNumber(role.startingValue)
+        }
+    })
 }
 
 function cleanNumber(input) {
     if (input) {
         const inputInt = parseInt(input);
-        if (inputInt !== NaN && inputInt <= 10 && inputInt > 0) {
+        if (inputInt !== NaN && inputInt <= 10 && inputInt >= 0) {
             return inputInt;
         }
+        else {
+            console.warn(`value ${inputInt} is not 1-10.  Setting to 0`);
+        }
+    }
+    else {
+        console.warn(`startingValue not given.  Setting to 0.`);
     }
 
     return 0;

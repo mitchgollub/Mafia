@@ -1,0 +1,27 @@
+[
+    {
+        "role": "Cop",
+        "roleName": "Cops",
+        "startingValue": 1
+    },
+    {
+        "role": "Mafia",
+        "roleName": "Mafia",
+        "startingValue": 2
+    },
+    {
+        "role": "Doctor",
+        "roleName": "Doctors",
+        "startingValue": 1
+    },
+    {
+        "role": "TownWatch",
+        "roleName": "Town Watch",
+        "startingValue": 1
+    },
+    {
+        "role": "Townsfolk",
+        "roleName": "Townsfolk",
+        "startingValue": 3
+    }
+]
