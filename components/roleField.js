@@ -6,9 +6,9 @@ function roleField({ role, roleName, value, started, handleChange }) {
         <React.Fragment>
             <div className={'flex-item__grow'}></div>
             <label className={'flex-item__shrink container'}>
-                <span className={'flex-item__shrink margin'}>{role}</span>
-                <input style={{ maxWidth: '3em' }} className={'flex-item__grow margin'} type="number" size="2" min="1" max="10"
-                    name={roleName} value={value} onChange={handleChange}
+                <span className={'flex-item__shrink margin'}>{roleName}</span>
+                <input style={{ maxWidth: '3em' }} className={'flex-item__grow margin'} type="number" size="2" min="0" max="10"
+                    name={role} value={value} onChange={handleChange}
                     disabled={started} required />
             </label>
             <div className={'flex-item__grow'}></div>
