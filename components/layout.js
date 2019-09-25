@@ -60,6 +60,10 @@ function Layout({ children }) {
         .margin-top {
             margin-top: 1em;
         }
+        
+        .margin-top-2 {
+            margin-top: 2em;
+        }
     `}</style>
         </div>
     );

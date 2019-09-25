@@ -1,5 +1,4 @@
 import React, { Component } from 'react'
-import Header from '../components/layout'
 import RoleField from '../components/roleField'
 import Roles from '../configuration/roles.json'
 import Layout from '../components/layout'
@@ -56,12 +55,12 @@ export default class Mafia extends Component {
 
     render() {
         return (
-            <Layout style={{ textAlign: 'center' }}>
-                You are the Narrator.  You understand the rules of the game and will direct players as they play.
-                <br />
-                <br />
-                <div>
+            <Layout>
+                <div className={'flex-item'}>
                     <form onSubmit={this.handleSubmit} className={'container-column container__align-center'}>
+                        <span className={'margin'}>
+                            You are the Narrator.  You understand the rules of the game and will direct players as they play.
+                        </span>
                         {this.state.roles.map(role => (
                             <RoleField
                                 key={role.role}
@@ -75,9 +74,7 @@ export default class Mafia extends Component {
                         <input className={'button'} type="submit" value="Submit" disabled={this.state.started} />
                     </form>
                 </div>
-                <br />
-                <br />
-                <div className={'container-column'} style={!this.state.started ? { display: 'none' } : {}}>
+                <div className={'flex-item container-column margin-top-2'} style={!this.state.started ? { display: 'none' } : {}}>
                     <div className={'flex-item container-column container__align-center'}>
                         <span className={'flex-item'}>Others can join your game using this code: <b>{this.state.game.code}</b></span>
                         <div className={'flex-item'}>
