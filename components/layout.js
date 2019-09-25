@@ -1,5 +1,5 @@
 import Head from 'next/head'
-import node from 'prop-types'
+import { node } from 'prop-types'
 
 function Layout({ children }) {
     return (

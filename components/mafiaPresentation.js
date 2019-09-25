@@ -1,7 +1,11 @@
+import Layout from "./layout"
+
 const MafiaPresentation = ({ id, character }) => (
-  <div>
-    You are the {character}
-  </div>
+  <Layout>
+    <div>
+      You are the {character}
+    </div>
+  </Layout>
 );
 
 export default MafiaPresentation;
