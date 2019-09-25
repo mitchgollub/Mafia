@@ -1,4 +1,6 @@
 import { withRouter } from 'next/router'
+import Header from '../components/layout';
+import Layout from '../components/layout';
 
 class Join extends React.Component {
     constructor(props) {
@@ -25,19 +27,23 @@ class Join extends React.Component {
 
     render() {
         return (
-            <form onSubmit={this.handleSubmit}>
-                <label>
-                    Enter Name
+            <Layout>
+                <form className={'flex-item container-column'} onSubmit={this.handleSubmit}>
+                    <div className={'flex-item'}>
+                        <label>
+                            Enter Name
                 <input type="text" value={this.state.name} onChange={this.handleNameChange} />
-                </label>
-                <br />
-                <label>
-                    Enter Game Code
+                        </label>
+                    </div>
+                    <div className={'flex-item'}>
+                        <label>
+                            Enter Game Code
                 <input type="text" value={this.state.code} onChange={this.handleCodeChange} />
-                </label>
-                <br />
-                <input type="submit" value="Submit" />
-            </form>
+                        </label>
+                    </div>
+                    <input className={'flex-item button'} type="submit" value="Submit" />
+                </form>
+            </Layout>
         );
     }
 }

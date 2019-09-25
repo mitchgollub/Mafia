@@ -1,7 +1,8 @@
 import React, { Component } from 'react'
-import Header from '../components/header'
+import Header from '../components/layout'
 import RoleField from '../components/roleField'
 import Roles from '../configuration/roles.json'
+import Layout from '../components/layout'
 
 export default class Mafia extends Component {
     constructor(props) {
@@ -55,8 +56,7 @@ export default class Mafia extends Component {
 
     render() {
         return (
-            <div className={'margin'} style={{ textAlign: 'center' }}>
-                <Header />
+            <Layout style={{ textAlign: 'center' }}>
                 You are the Narrator.  You understand the rules of the game and will direct players as they play.
                 <br />
                 <br />
@@ -89,7 +89,7 @@ export default class Mafia extends Component {
                         <button className={'button flex-item'} onClick={this.checkGameStatus}>Refresh</button>
                     </div>
                 </div>
-            </div>
+            </Layout>
         );
     }
 }

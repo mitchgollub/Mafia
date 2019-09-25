@@ -1,11 +1,21 @@
 import Head from 'next/head'
-export default () => (
-  <div>
-    <Head>
-      <meta name="viewport" content="width=device-width, initial-scale=1" />
-      <meta charSet="utf-8" />
-    </Head>
-    <style jsx global>{`
+import node from 'prop-types'
+
+function Layout({ children }) {
+    return (
+        <div>
+            <Head>
+                <meta name="viewport" content="width=device-width, initial-scale=1" />
+                <meta charSet="utf-8" />
+            </Head>
+            <div className={'container'}>
+                <div className={'flex-item__grow'}></div>
+                <div className={'flex-item'}>
+                    {children}
+                </div>
+                <div className={'flex-item__grow'}></div>
+            </div>
+            <style jsx global>{`
         body {
             background-color: white;
         }
@@ -51,5 +61,13 @@ export default () => (
             margin-top: 1em;
         }
     `}</style>
-  </div>
-)
+        </div>
+    );
+}
+
+Layout.propTypes = {
+    children: node.isRequired
+}
+
+export default Layout
+
