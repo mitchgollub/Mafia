@@ -4,11 +4,11 @@ const escape = require('sql-template-strings')
 export default async (req, res) => {
 
     // TODO: MAKE A FOREIGN KEY ON THIS IDENTIFIER
-    var result = '';
+    var gameCode = '';
     var characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
     var charactersLength = characters.length;
     for (var i = 0; i < 4; i++) {
-        result += characters.charAt(Math.floor(Math.random() * charactersLength));
+        gameCode += characters.charAt(Math.floor(Math.random() * charactersLength));
     }
     console.log(`request: ${req.body}`)
     const roles = req.body;
@@ -16,7 +16,6 @@ export default async (req, res) => {
     const cleanedRoles = cleanInput(roles);
     const availableString = []
     cleanedRoles.map(role => {
-        // TODO: Need concept of roleName for user display (singular and plural forms)
         for (let index = 0; index < role.startingValue; index++) {
             availableString.push(role.role)
         }
@@ -33,9 +32,9 @@ export default async (req, res) => {
     }
 
     const resp = await db.query(escape`INSERT INTO Games(game_code, players) 
-        VALUES(${result}, ${JSON.stringify(players)})`)
+        VALUES(${gameCode}, ${JSON.stringify(players)})`)
 
-    res.status(200).json({ game: { code: result, players: players.current } });
+    res.status(200).json({ game: { code: gameCode, players: players.current } });
 }
 
 function cleanInput(roles) {

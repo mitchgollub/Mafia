@@ -12,7 +12,8 @@ export default class Mafia extends Component {
                 code: "",
                 players: []
             },
-            roles: Roles
+            roles: Roles,
+            started: false
         }
 
         this.handleChange = this.handleChange.bind(this);

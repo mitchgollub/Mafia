@@ -19,9 +19,9 @@ function roleField({ role, roleName, value, started, handleChange }) {
 roleField.propTypes = {
     role: string.isRequired,
     roleName: string.isRequired,
-    value: number,
-    started: bool,
-    handleChange: func
+    value: number.isRequired,
+    started: bool.isRequired,
+    handleChange: func.isRequired
 }
 
 export default roleField
