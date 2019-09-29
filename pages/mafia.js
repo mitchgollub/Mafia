@@ -3,7 +3,7 @@ import MafiaPresentation from '../components/mafiaPresentation';
 
 export default class MafiaContainer extends Component {
     static getInitialProps = ({ query }) => {
-        return ({ id: query.id, name: query.name, character: '' });
+        return ({ id: query.id, name: query.name, character: null });
     }
 
     async componentDidMount() {
