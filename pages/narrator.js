@@ -1,7 +1,8 @@
 import React, { Component } from 'react'
+import Layout from '../components/layout'
+import Loading from '../components/loading'
 import RoleField from '../components/roleField'
 import Roles from '../configuration/roles.json'
-import Layout from '../components/layout'
 
 export default class Mafia extends Component {
     constructor(props) {
@@ -13,7 +14,8 @@ export default class Mafia extends Component {
                 players: []
             },
             roles: Roles,
-            started: false
+            started: false,
+            refresh: false
         }
 
         this.handleChange = this.handleChange.bind(this);
@@ -46,13 +48,16 @@ export default class Mafia extends Component {
                 }))
     }
 
-    checkGameStatus = () =>
+    checkGameStatus() {
+        this.setState({ refresh: true });
         fetch(`/api/game/${this.state.game.code}`)
             .then(res => res.json()
                 .then((game) => {
-                    this.setState(game)
+                    this.setState(game);
+                    this.setState({ refresh: false });
                 })
             )
+    }
 
     render() {
         return (
@@ -84,7 +89,12 @@ export default class Mafia extends Component {
                                 <div key={player.id}>{player.role}: {player.name}</div>
                             ))}
                         </div>
-                        <button className={'button flex-item'} onClick={this.checkGameStatus}>Refresh</button>
+                        <button
+                            className={'button flex-item'}
+                            onClick={this.checkGameStatus}
+                            disabled={this.state.refresh}>
+                            {this.state.refresh ? <Loading /> : 'Refresh'}
+                        </button>
                     </div>
                 </div>
             </Layout>
