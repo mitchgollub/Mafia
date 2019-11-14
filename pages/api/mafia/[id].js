@@ -27,6 +27,12 @@ export default async (req, res) => {
         return;
     }
 
+    // Check if there are available players
+    if (!players.available.length) {
+        res.status(200).json({id: req.query.id, role: 'Empty', name: req.body.name});
+        return;
+    }
+
     // TODO: USE VERSIONING SYSTEM (OR TRANSACTIONS/RETRIES AND TRY/CATCHES) 
     //       TO PREVENT RACE CONDITIONS
 
