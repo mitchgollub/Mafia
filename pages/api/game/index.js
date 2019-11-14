@@ -34,6 +34,14 @@ export default async (req, res) => {
     const resp = await db.query(escape`INSERT INTO Games(game_code, players) 
         VALUES(${gameCode}, ${JSON.stringify(players)})`)
 
+    console.log(resp)
+    if (resp.error) {
+        res.status(500).json({
+            message: "Failed to connect to database",
+            error: `${resp.error}`
+        })
+    }
+
     res.status(200).json({ game: { code: gameCode, players: players.current } });
 }
 

@@ -1,11 +1,14 @@
 import Layout from "./layout"
 import Loading from "./loading";
 
-const MafiaPresentation = ({ character }) => (
+const MafiaPresentation = ({ role, error }) => (
   <Layout>
-    <div className="container-column container__align-center">
+    <div className="container-column container__align-center" style={!error ? {} : { display: 'none' }}>
       <div className="flex-item">You are the</div>
-      <div className="flex-item"><h1>{character ? character : <Loading />}</h1></div>
+      <div className="flex-item"><h1>{role ? role : <Loading />}</h1></div>
+    </div>
+    <div className="container-column container__align-center" style={error && error.length ? {} : { display: 'none' }}>
+      <div className="flex-item">An error occured.</div>
     </div>
   </Layout>
 );

@@ -76,7 +76,7 @@ export default class Mafia extends Component {
                     </form>
                 </div>
                 <div className={'flex-item container-column margin-top-2'} style={!this.state.started ? { display: 'none' } : {}}>
-                    <div className={'flex-item container-column container__align-center'}>
+                    <div className={'flex-item container-column container__align-center'} style={this.state.error ? { display: 'none' } : {}}>
                         <span className={'flex-item'}>Others can join your game using this code: <b>{this.state.game.code}</b></span>
                         <div className={'flex-item'}>
                             <span>Players are listed below:</span>
@@ -85,6 +85,9 @@ export default class Mafia extends Component {
                             ))}
                         </div>
                         <button className={'button flex-item'} onClick={this.checkGameStatus}>Refresh</button>
+                    </div>
+                    <div className={'flex-item container-column container__align-center'} style={!this.state.error ? { display: 'none' } : {}}>
+                        <span className={'flex-item'}>Error occurred.  Please refresh and try again.</span>
                     </div>
                 </div>
             </Layout>
