@@ -10,7 +10,7 @@ export default async (req, res) => {
     for (var i = 0; i < 4; i++) {
         gameCode += characters.charAt(Math.floor(Math.random() * charactersLength));
     }
-    console.log(`request: ${req.body}`)
+    console.log(`request: ${JSON.stringify(req.body)}`)
     const roles = req.body;
 
     const cleanedRoles = cleanInput(roles);
@@ -31,15 +31,15 @@ export default async (req, res) => {
         available: available
     }
 
-    const resp = await db.query(escape`INSERT INTO Games(game_code, players) 
+    const resp = await db.query(escape`INSERT INTO Games(game_code, players)
         VALUES(${gameCode}, ${JSON.stringify(players)})`)
 
-    console.log(resp)
     if (resp.error) {
         res.status(500).json({
             message: "Failed to connect to database",
             error: `${resp.error}`
         })
+        return;
     }
 
     res.status(200).json({ game: { code: gameCode, players: players.current } });

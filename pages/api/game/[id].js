@@ -8,6 +8,7 @@ export default async (req, res) => {
     if (resp && resp.length) {
         const players = JSON.parse(resp[0].players);
         res.status(200).json({ game: { code: req.query.id, players: players.current } });
+        return;
     }
     
     res.status(500)
