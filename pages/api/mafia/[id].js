@@ -39,7 +39,7 @@ export default async (req, res) => {
     players.available.splice(index, 1);
     players.current.push({ id: selected.id, role: selected.role, name: req.body.name, session: req.body.session });
 
-    const resp2 = await db.query(escape`UPDATE Games SET players=${JSON.stringify(players)} WHERE game_code = ${req.query.id})
+    const resp2 = await db.query(escape`UPDATE Games SET players=${JSON.stringify(players)} WHERE game_code = ${req.query.id}`)
 
     res.status(200).json({ id: req.query.id, role: selected.role });
 
