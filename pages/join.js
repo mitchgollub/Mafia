@@ -1,6 +1,8 @@
 import { withRouter } from 'next/router'
 import Layout from '../components/layout';
 
+const uuidv4 = require('uuid/v4');
+
 class Join extends React.Component {
     constructor(props) {
         super(props);
@@ -21,7 +23,7 @@ class Join extends React.Component {
 
     handleSubmit(event) {
         event.preventDefault();
-        this.props.router.push(`/mafia?id=${this.state.code}&name=${this.state.name}`)
+        this.props.router.push(`/mafia?id=${this.state.code}&name=${this.state.name}&session=${uuidv4()}`)
     }
 
     render() {
