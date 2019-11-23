@@ -1,19 +1,16 @@
 const db = require('../../../lib/db');
-const escape = require('sql-template-strings')
+const Error = require ('../../../lib/error');
+const escape = require('sql-template-strings');
 
 export default async (req, res) => {
+  try {
     console.log('id: ' + req.query.id);
     console.log('name: ' + req.body.name);
     console.log('session: ' + req.body.session);
     const resp = await db.query(escape`SELECT players FROM Games WHERE game_code = ${req.query.id}`)
 
-    if (resp.error) {
-        res.status(500).json({
-            message: "Failed to connect to database",
-            error: `${resp.error}`
-        })
-        return;
-    }
+    if (!resp[0])
+      return Error.InternalServerError(res, 'Could not find Game')
 
     const players = JSON.parse(resp[0].players)
 
@@ -42,5 +39,8 @@ export default async (req, res) => {
     const resp2 = await db.query(escape`UPDATE Games SET players=${JSON.stringify(players)} WHERE game_code = ${req.query.id}`)
 
     res.status(200).json({ id: req.query.id, role: selected.role });
-
+  }
+  catch(error) {
+    return Error.InternalServerError(res, error)
+  }
 }
