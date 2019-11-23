@@ -1,4 +1,5 @@
 const db = require('../../../lib/db');
+const Error = require ('../../../lib/error');
 const escape = require('sql-template-strings')
 
 export default async (req, res) => {
@@ -35,11 +36,7 @@ export default async (req, res) => {
         VALUES(${gameCode}, ${JSON.stringify(players)})`)
 
     if (resp.error) {
-        res.status(500).json({
-            message: "Failed to connect to database",
-            error: `${resp.error}`
-        })
-        return;
+      return Error.InternalServerError(res, 'Could not create game')
     }
 
     res.status(200).json({ game: { code: gameCode, players: players.current } });
