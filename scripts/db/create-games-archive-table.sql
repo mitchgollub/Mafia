@@ -16,9 +16,10 @@ DELIMITER //
 
 CREATE PROCEDURE ArchiveGames()
 BEGIN
+    SET @Expired = DATE_SUB(CURRENT_TIMESTAMP, INTERVAL 3 HOUR);
     Insert into GamesArchive (game_code,players,created_at,updated_at)
-    Select game_code,players,created_at,updated_at from Games;
-    Delete from Games;
+    Select game_code,players,created_at,updated_at from Games where updated_at < @Expired;
+    Delete from Games where updated_at < @Expired;
 END //
 
 DELIMITER;
