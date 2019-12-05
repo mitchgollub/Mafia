@@ -2,6 +2,8 @@ const db = require('../../../lib/db');
 const Error = require ('../../../lib/error');
 const escape = require('sql-template-strings');
 
+import roleDescriptions from '../../../configuration/roleDescriptions.json';
+
 export default async (req, res) => {
   try {
     console.log('id: ' + req.query.id);
@@ -38,7 +40,11 @@ export default async (req, res) => {
 
     const resp2 = await db.query(escape`UPDATE Games SET players=${JSON.stringify(players)} WHERE game_code = ${req.query.id}`)
 
-    res.status(200).json({ id: req.query.id, role: selected.role });
+    res.status(200).json({ 
+      id: req.query.id, 
+      role: selected.role, 
+      description: roleDescriptions.find(x => x.role == selected.role).description 
+    });
   }
   catch(error) {
     return Error.InternalServerError(res, error)
