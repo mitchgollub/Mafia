@@ -1,5 +1,5 @@
 const db = require('../../../lib/db');
-const Error = require ('../../../lib/error');
+const Error = require('../../../lib/error');
 const escape = require('sql-template-strings');
 
 import roleDescriptions from '../../../configuration/roleDescriptions.json';
@@ -18,35 +18,42 @@ export default async (req, res) => {
 
     // Check if player's session already exists in case of refresh
     const existingPlayer = players.current.find((player) =>
-        player.session === req.body.session);
+      player.session === req.body.session);
 
     if (existingPlayer) {
-        res.status(200).json(existingPlayer);
-        return;
+      existingPlayer.description = roleDescriptions[existingPlayer.role];
+      res.status(200).json(existingPlayer);
+      return;
     }
 
     // Check if there are available players
     if (!players.available.length) {
-        res.status(200).json({id: req.query.id, role: 'Empty', name: req.body.name, session: req.body.session});
-        return;
+      res.status(200).json({ id: req.query.id, role: 'Empty', name: req.body.name, session: req.body.session });
+      return;
     }
 
     // TODO: USE VERSIONING SYSTEM (OR TRANSACTIONS/RETRIES AND TRY/CATCHES)
     //       TO PREVENT RACE CONDITIONS
     const index = Math.floor(Math.random() * (players.available.length))
-    const selected = players.available[index]
+    const selected = players.available[index];
     players.available.splice(index, 1);
-    players.current.push({ id: selected.id, role: selected.role, name: req.body.name, session: req.body.session });
+
+    players.current.push({
+      id: selected.id,
+      role: selected.role,
+      name: req.body.name,
+      session: req.body.session
+    });
 
     const resp2 = await db.query(escape`UPDATE Games SET players=${JSON.stringify(players)} WHERE game_code = ${req.query.id}`)
 
-    res.status(200).json({ 
-      id: req.query.id, 
-      role: selected.role, 
-      description: roleDescriptions.find(x => x.role == selected.role).description 
+    res.status(200).json({
+      id: req.query.id,
+      role: selected.role,
+      description: roleDescriptions[selected.role]
     });
   }
-  catch(error) {
+  catch (error) {
     return Error.InternalServerError(res, error)
   }
 }
