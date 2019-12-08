@@ -2,9 +2,9 @@ const db = require('../../../lib/db');
 const Error = require ('../../../lib/error');
 const escape = require('sql-template-strings')
 
-export default async (req, res) => {
+export default async (req, res) => await createGame(req, res, db, Error, escape);
 
-    // TODO: MAKE A FOREIGN KEY ON THIS IDENTIFIER
+export async function createGame(req, res, db, Error, escape) {
     var gameCode = '';
     var characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
     var charactersLength = characters.length;
@@ -40,6 +40,7 @@ export default async (req, res) => {
     }
 
     res.status(200).json({ game: { code: gameCode, players: players.current } });
+    return res;
 }
 
 function cleanInput(roles) {
