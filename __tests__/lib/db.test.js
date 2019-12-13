@@ -1,5 +1,4 @@
 const db = require('../../lib/db');
-jest.mock('serverless-mysql');
 
 test('query returns query results', async () => {
     const resp = [
