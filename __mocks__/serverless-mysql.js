@@ -1,13 +1,16 @@
 'use strict';
 const mysql = jest.genMockFromModule('serverless-mysql');
 
-let mockDbResponse = {};
-function __setMockDbResonse(dbResponse) { mockDbResponse = dbResponse; }
-
-async function query(query) {
-    return mockDbResponse;
+let mockDbResponses = [];
+function __setMockDbResonse(dbResponse) {
+    mockDbResponses.push(dbResponse);
 }
 
+async function query(query) {
+    const mockDbResponse = mockDbResponses[0];
+    mockDbResponses.splice(0, 1);
+    return mockDbResponse;
+}
 
 mysql.mockImplementation(() => mysql);
 mysql.end = () => null;

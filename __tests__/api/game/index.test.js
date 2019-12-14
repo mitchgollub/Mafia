@@ -12,6 +12,8 @@ test('Creates Game', async () => {
         ]
     };
 
+    require('serverless-mysql').__setMockDbResonse([]);
+
     const response = await game.default(req, res);
 
     expect(response.statusCode).toBe(200);

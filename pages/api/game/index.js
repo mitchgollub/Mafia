@@ -2,9 +2,7 @@ const db = require('../../../lib/db');
 const Error = require ('../../../lib/error');
 const escape = require('sql-template-strings')
 
-export default async (req, res) => await createGame(req, res, db, Error, escape);
-
-export async function createGame(req, res, db, Error, escape) {
+export default async (req, res) => {
     var gameCode = '';
     var characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
     var charactersLength = characters.length;
