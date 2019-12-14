@@ -1,24 +1,12 @@
 const game_id = require('../../../pages/api/game/[id]');
+const res = require('../../../__mocks__/res');
 
 test('Returns Game by Id', async () => {
     const req = {
         query: {
             id: 'AAAA'
         }
-    },
-        res = {
-            statusCode: 0,
-            json: {},
-            status: function (statusCode) {
-                this.statusCode = statusCode
-                return {
-                    json: (object) => {
-                        this.json = object
-                    }
-                }
-            }
-        };
-
+    };
 
     require('serverless-mysql').__setMockDbResonse([
         {

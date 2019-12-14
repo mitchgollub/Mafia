@@ -1,4 +1,5 @@
 const game = require('../../../pages/api/game/index');
+const res = require('../../../__mocks__/res');
 
 test('Creates Game', async () => {
     const req = {
@@ -9,19 +10,7 @@ test('Creates Game', async () => {
                 startingValue: 2
             }
         ]
-    },
-        res = {
-            statusCode: 0,
-            json: {},
-            status: function (statusCode) {
-                this.statusCode = statusCode
-                return {
-                    json: (object) => {
-                        this.json = object
-                    }
-                }
-            }
-        };
+    };
 
     const response = await game.default(req, res);
 

@@ -1,19 +1,8 @@
 const Error = require('../../lib/error');
+const res = require('../../__mocks__/res');
 
 test('InternalServerError returns 500 w/ error', async () => {
-    const res = {
-            statusCode: 0,
-            json: {},
-            status: function (statusCode) {
-                this.statusCode = statusCode
-                return {
-                    json: (object) => {
-                        this.json = object
-                    }
-                }
-            }
-        }, 
-        error = 500;
+    const error = 500;
 
     const response = Error.InternalServerError(res, error);
     
