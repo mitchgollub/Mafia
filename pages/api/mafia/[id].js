@@ -23,13 +23,13 @@ export default async (req, res) => {
     if (existingPlayer) {
       existingPlayer.description = roleDescriptions[existingPlayer.role];
       res.status(200).json(existingPlayer);
-      return;
+      return res;
     }
 
     // Check if there are available players
     if (!players.available.length) {
       res.status(200).json({ id: req.query.id, role: 'Empty', name: req.body.name, session: req.body.session });
-      return;
+      return res;
     }
 
     // TODO: USE VERSIONING SYSTEM (OR TRANSACTIONS/RETRIES AND TRY/CATCHES)
@@ -39,6 +39,7 @@ export default async (req, res) => {
     players.available.splice(index, 1);
 
     players.current.push({
+    
       id: selected.id,
       role: selected.role,
       name: req.body.name,
@@ -52,6 +53,8 @@ export default async (req, res) => {
       role: selected.role,
       description: roleDescriptions[selected.role]
     });
+
+    return res;
   }
   catch (error) {
     return Error.InternalServerError(res, error)
