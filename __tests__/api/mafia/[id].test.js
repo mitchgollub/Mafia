@@ -14,6 +14,7 @@ test('Creates Player', async () => {
             id: 'AAAA'
         },
         body: {
+            id: 'AAAA',
             name: 'Mitch',
             session: 'guid'
         }
@@ -43,6 +44,7 @@ test('Returns \'Empty\' when no players available', async () => {
             id: 'AAAA'
         },
         body: {
+            id: 'AAAA',
             name: 'Mitch',
             session: 'guid'
         }

@@ -3,13 +3,15 @@ const Error = require('../../../lib/error');
 const escape = require('sql-template-strings');
 
 import roleDescriptions from '../../../configuration/roleDescriptions.json';
+import PlayerRequest from '../../../models/playerRequest.js';
+import Player from '../../../models/player.js';
+import PlayerResponse from '../../../models/playerResponse.js';
 
 export default async (req, res) => {
   try {
-    console.log('id: ' + req.query.id);
-    console.log('name: ' + req.body.name);
-    console.log('session: ' + req.body.session);
-    const resp = await db.query(escape`SELECT players FROM Games WHERE game_code = ${req.query.id}`)
+    const playerRequest = new PlayerRequest(req.body);
+    console.log('playerRequest: ' + JSON.stringify(playerRequest));
+    const resp = await db.query(escape`SELECT players FROM Games WHERE game_code = ${playerRequest.id}`)
 
     if (!resp[0])
       return Error.InternalServerError(res, 'Could not find Game')
@@ -18,7 +20,7 @@ export default async (req, res) => {
 
     // Check if player's session already exists in case of refresh
     const existingPlayer = players.current.find((player) =>
-      player.session === req.body.session);
+      player.session === playerRequest.session);
 
     if (existingPlayer) {
       existingPlayer.description = roleDescriptions[existingPlayer.role];
@@ -28,7 +30,7 @@ export default async (req, res) => {
 
     // Check if there are available players
     if (!players.available.length) {
-      res.status(200).json({ id: req.query.id, role: 'Empty', name: req.body.name, session: req.body.session });
+      res.status(200).json(new Player(playerRequest.id, 'Empty', playerRequest.name, playerRequest.session));
       return res;
     }
 
@@ -38,21 +40,20 @@ export default async (req, res) => {
     const selected = players.available[index];
     players.available.splice(index, 1);
 
-    players.current.push({
-    
-      id: selected.id,
-      role: selected.role,
-      name: req.body.name,
-      session: req.body.session
-    });
+    players.current.push(new Player(
+      selected.id,
+      selected.role,
+      playerRequest.name,
+      playerRequest.session
+    ));
 
     const resp2 = await db.query(escape`UPDATE Games SET players=${JSON.stringify(players)} WHERE game_code = ${req.query.id}`)
 
-    res.status(200).json({
-      id: req.query.id,
-      role: selected.role,
-      description: roleDescriptions[selected.role]
-    });
+    res.status(200).json(new PlayerResponse(
+      playerRequest.id,
+      selected.role,
+      roleDescriptions[selected.role]
+    ));
 
     return res;
   }
