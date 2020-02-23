@@ -2,16 +2,14 @@ import React, { Component } from 'react'
 import RoleField from '../components/roleField'
 import Roles from '../configuration/roles.json'
 import Layout from '../components/layout'
+import Game from '../models/game'
 
 export default class Mafia extends Component {
     constructor(props) {
         super(props)
 
         this.state = {
-            game: {
-                code: "",
-                players: []
-            },
+            game: new Game(),
             roles: Roles,
             started: false
         }
@@ -42,7 +40,8 @@ export default class Mafia extends Component {
         })
             .then(res => res.json()
                 .then((game) => {
-                    this.setState(game);
+                    console.log(game)
+                    this.setState({ game });
                 }))
     }
 
@@ -50,7 +49,7 @@ export default class Mafia extends Component {
         fetch(`/api/game/${this.state.game.code}`)
             .then(res => res.json()
                 .then((game) => {
-                    this.setState(game)
+                    this.setState({ game })
                 })
             )
 

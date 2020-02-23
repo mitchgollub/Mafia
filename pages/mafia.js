@@ -14,11 +14,11 @@ export default class MafiaContainer extends Component {
                 'Accept': 'application/json',
                 'Content-Type': 'application/json'
             },
-            body: JSON.stringify(new PlayerRequest(
-                this.props.id,
-                this.props.name,
-                this.props.session
-            ))
+            body: JSON.stringify(new PlayerRequest({
+                id: this.props.id,
+                name: this.props.name,
+                session: this.props.session
+            }))
         });
         const state = await res.json()
         this.setState(state);
