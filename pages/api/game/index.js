@@ -1,5 +1,7 @@
+import Game from '../../../models/game';
+
 const db = require('../../../lib/db');
-const Error = require ('../../../lib/error');
+const Error = require('../../../lib/error');
 const escape = require('sql-template-strings')
 
 export default async (req, res) => {
@@ -34,10 +36,10 @@ export default async (req, res) => {
         VALUES(${gameCode}, ${JSON.stringify(players)})`)
 
     if (resp.error) {
-      return Error.InternalServerError(res, 'Could not create game')
+        return Error.InternalServerError(res, 'Could not create game')
     }
 
-    res.status(200).json({ game: { code: gameCode, players: players.current } });
+    res.status(200).json(new Game({ code: gameCode, players: players.current }));
     return res;
 }
 

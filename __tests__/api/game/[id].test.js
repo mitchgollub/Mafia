@@ -1,3 +1,5 @@
+import Game from '../../../models/game'
+
 const game_id = require('../../../pages/api/game/[id]');
 const res = require('../../../__mocks__/res');
 
@@ -14,7 +16,7 @@ test('Returns Game by Id', async () => {
         }
     ]);
 
-    expectedResponse = { game: { code: "AAAA", players: [] } };
+    const expectedResponse = new Game({ code: "AAAA", players: [] });
 
     const response = await game_id.default(req, res);
 
