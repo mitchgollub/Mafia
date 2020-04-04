@@ -1,9 +1,10 @@
 import React, { Component } from 'react'
 import MafiaPresentation from '../components/mafiaPresentation';
+import PlayerRequest from '../models/playerRequest';
 
 export default class MafiaContainer extends Component {
     static getInitialProps = ({ query }) => {
-        return ({ id: query.id, name: query.name, character: null });
+        return ({ id: query.id, name: query.name, session: query.session });
     }
 
     async componentDidMount() {
@@ -13,10 +14,11 @@ export default class MafiaContainer extends Component {
                 'Accept': 'application/json',
                 'Content-Type': 'application/json'
             },
-            body: JSON.stringify({
+            body: JSON.stringify(new PlayerRequest({
                 id: this.props.id,
-                name: this.props.name
-            })
+                name: this.props.name,
+                session: this.props.session
+            }))
         });
         const state = await res.json()
         this.setState(state);

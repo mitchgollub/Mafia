@@ -3,16 +3,14 @@ import Layout from '../components/layout'
 import Loading from '../components/loading'
 import RoleField from '../components/roleField'
 import Roles from '../configuration/roles.json'
+import Game from '../models/game'
 
 export default class Mafia extends Component {
     constructor(props) {
         super(props)
 
         this.state = {
-            game: {
-                code: "",
-                players: []
-            },
+            game: new Game(),
             roles: Roles,
             started: false,
             refresh: false
@@ -44,7 +42,8 @@ export default class Mafia extends Component {
         })
             .then(res => res.json()
                 .then((game) => {
-                    this.setState(game);
+                    console.log(game)
+                    this.setState({ game });
                 }))
     }
 
@@ -53,7 +52,7 @@ export default class Mafia extends Component {
         fetch(`/api/game/${this.state.game.code}`)
             .then(res => res.json()
                 .then((game) => {
-                    this.setState(game);
+                    this.setState({ game })
                     this.setState({ refresh: false });
                 })
             )
@@ -81,7 +80,7 @@ export default class Mafia extends Component {
                     </form>
                 </div>
                 <div className={'flex-item container-column margin-top-2'} style={!this.state.started ? { display: 'none' } : {}}>
-                    <div className={'flex-item container-column container__align-center'}>
+                    <div className={'flex-item container-column container__align-center'} style={this.state.error ? { display: 'none' } : {}}>
                         <span className={'flex-item'}>Others can join your game using this code: <b>{this.state.game.code}</b></span>
                         <div className={'flex-item'}>
                             <span>Players are listed below:</span>
@@ -95,6 +94,9 @@ export default class Mafia extends Component {
                             disabled={this.state.refresh}>
                             {this.state.refresh ? <Loading /> : 'Refresh'}
                         </button>
+                    </div>
+                    <div className={'flex-item container-column container__align-center'} style={!this.state.error ? { display: 'none' } : {}}>
+                        <span className={'flex-item'}>Error occurred.  Please refresh and try again.</span>
                     </div>
                 </div>
             </Layout>

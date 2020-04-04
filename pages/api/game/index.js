@@ -1,16 +1,17 @@
+import Game from '../../../models/game';
+
 const db = require('../../../lib/db');
+const Error = require('../../../lib/error');
 const escape = require('sql-template-strings')
 
 export default async (req, res) => {
-
-    // TODO: MAKE A FOREIGN KEY ON THIS IDENTIFIER
     var gameCode = '';
     var characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
     var charactersLength = characters.length;
     for (var i = 0; i < 4; i++) {
         gameCode += characters.charAt(Math.floor(Math.random() * charactersLength));
     }
-    console.log(`request: ${req.body}`)
+    console.log(`request: ${JSON.stringify(req.body)}`)
     const roles = req.body;
 
     const cleanedRoles = cleanInput(roles);
@@ -31,10 +32,15 @@ export default async (req, res) => {
         available: available
     }
 
-    const resp = await db.query(escape`INSERT INTO Games(game_code, players) 
+    const resp = await db.query(escape`INSERT INTO Games(game_code, players)
         VALUES(${gameCode}, ${JSON.stringify(players)})`)
 
-    res.status(200).json({ game: { code: gameCode, players: players.current } });
+    if (resp.error) {
+        return Error.InternalServerError(res, 'Could not create game')
+    }
+
+    res.status(200).json(new Game({ code: gameCode, players: players.current }));
+    return res;
 }
 
 function cleanInput(roles) {
