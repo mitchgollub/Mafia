@@ -13,4 +13,4 @@ test('query returns query results', async () => {
     const actual = await db.query('select username, password from users;');
 
     expect(actual).toEqual(resp)
-}) 
+});

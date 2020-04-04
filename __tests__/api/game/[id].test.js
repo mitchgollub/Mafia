@@ -23,3 +23,21 @@ test('Returns Game by Id', async () => {
     expect(response.statusCode).toBe(200);
     expect(response.json).toStrictEqual(expectedResponse);
 });
+
+test('Returns 500 on error', async () => {
+    const req = {
+        query: {
+            id: 'AAAA'
+        }
+    };
+
+    require('serverless-mysql').__setMockDbResonse(
+        {
+            error: "Error"
+        }
+    );
+
+    const response = await game_id.default(req, res);
+
+    expect(response.statusCode).toBe(500);
+});

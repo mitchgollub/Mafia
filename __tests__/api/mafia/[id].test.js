@@ -67,3 +67,78 @@ test('Returns \'Empty\' when no players available', async () => {
     expect(actual.statusCode).toEqual(200);
     expect(actual.json).toEqual(expected);
 });
+
+test('Returns existing player when found', async () => {
+    const req = {
+        query: {
+            id: 'AAAA'
+        },
+        body: {
+            id: 'AAAA',
+            name: 'Mitch',
+            session: 'guid'
+        }
+    },
+        expected = {
+            id: "AAAA",
+            name: "Mitch",
+            role: "Cop",
+            session: "guid",
+            description: roleDescriptions.Cop
+        };
+
+    mockMySql.__setMockDbResonse([
+        {
+            players: JSON.stringify({ current: [expected], available: [] })
+        }
+    ]);
+
+    const actual = await mafia.default(req, res);
+
+
+    expect(actual.statusCode).toEqual(200);
+    expect(actual.json).toEqual(expected);
+});
+
+test('Returns 400 when no players available', async () => {
+    const req = {
+        query: {
+            id: 'AAAA'
+        },
+        body: {
+            id: 'AAAA',
+            name: 'Mitch',
+            session: 'guid'
+        }
+    };
+
+    mockMySql.__setMockDbResonse({ error: "Error" });
+
+    const actual = await mafia.default(req, res);
+
+    expect(actual.statusCode).toEqual(400);
+});
+
+test('Returns 500 on error', async () => {
+    const req = {
+        query: {
+            id: 'AAAA'
+        },
+        body: {
+            id: 'AAAA',
+            name: 'Mitch',
+            session: 'guid'
+        }
+    };
+
+    // Malformed JSON in DB
+    mockMySql.__setMockDbResonse([
+        {
+            players: JSON.stringify({ current: [], available: [] }) + '}'
+        }
+    ]);
+
+    const actual = await mafia.default(req, res);
+
+    expect(actual.statusCode).toEqual(500);
+});

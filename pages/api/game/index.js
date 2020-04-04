@@ -15,7 +15,7 @@ export default async (req, res) => {
     const roles = req.body;
 
     const cleanedRoles = cleanInput(roles);
-    const availableString = []
+    const availableString = [];
     cleanedRoles.map(role => {
         for (let index = 0; index < role.startingValue; index++) {
             availableString.push(role.role)
