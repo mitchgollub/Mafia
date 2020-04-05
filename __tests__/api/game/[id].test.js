@@ -1,43 +1,44 @@
-import Game from '../../../models/game'
+import Game from '../../../models/game';
 
-const game_id = require('../../../pages/api/game/[id]');
+const mysqlMock = require('serverless-mysql');
+const gameId = require('../../../pages/api/game/[id]');
 const res = require('../../../__mocks__/res');
 
 test('Returns Game by Id', async () => {
-    const req = {
-        query: {
-            id: 'AAAA'
-        }
-    };
+  const req = {
+    query: {
+      id: 'AAAA',
+    },
+  };
 
-    require('serverless-mysql').__setMockDbResonse([
-        {
-            players: JSON.stringify({ current: [] })
-        }
-    ]);
+  mysqlMock.setMockDbResonse([
+    {
+      players: JSON.stringify({ current: [] }),
+    },
+  ]);
 
-    const expectedResponse = new Game({ code: "AAAA", players: [] });
+  const expectedResponse = new Game({ code: 'AAAA', players: [] });
 
-    const response = await game_id.default(req, res);
+  const response = await gameId.default(req, res);
 
-    expect(response.statusCode).toBe(200);
-    expect(response.json).toStrictEqual(expectedResponse);
+  expect(response.statusCode).toBe(200);
+  expect(response.json).toStrictEqual(expectedResponse);
 });
 
 test('Returns 500 on error', async () => {
-    const req = {
-        query: {
-            id: 'AAAA'
-        }
-    };
+  const req = {
+    query: {
+      id: 'AAAA',
+    },
+  };
 
-    require('serverless-mysql').__setMockDbResonse(
-        {
-            error: "Error"
-        }
-    );
+  mysqlMock.setMockDbResonse(
+    {
+      error: 'Error',
+    },
+  );
 
-    const response = await game_id.default(req, res);
+  const response = await gameId.default(req, res);
 
-    expect(response.statusCode).toBe(500);
+  expect(response.statusCode).toBe(500);
 });

@@ -1,21 +1,22 @@
-import Head from 'next/head'
-import { node } from 'prop-types'
+import Head from 'next/head';
+import { node } from 'prop-types';
 
 function Layout({ children }) {
-    return (
-        <div>
-            <Head>
-                <meta name="viewport" content="width=device-width, initial-scale=1" />
-                <meta charSet="utf-8" />
-            </Head>
-            <div className={'container'}>
-                <div className={'flex-item__grow'}></div>
-                <div className={'flex-item'}>
-                    {children}
-                </div>
-                <div className={'flex-item__grow'}></div>
-            </div>
-            <style jsx global>{`
+  return (
+    <div>
+      <Head>
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
+        <meta charSet="utf-8" />
+      </Head>
+      <div className="container">
+        <div className="flex-item__grow" />
+        <div className="flex-item">
+          {children}
+        </div>
+        <div className="flex-item__grow" />
+      </div>
+      <style jsx global>
+        {`
         body {
             background-color: white;
         }
@@ -64,14 +65,14 @@ function Layout({ children }) {
         .margin-top-2 {
             margin-top: 2em;
         }
-    `}</style>
-        </div>
-    );
+    `}
+      </style>
+    </div>
+  );
 }
 
 Layout.propTypes = {
-    children: node.isRequired
-}
+  children: node.isRequired,
+};
 
-export default Layout
-
+export default Layout;

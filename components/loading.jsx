@@ -1,14 +1,15 @@
-import React from 'react'
+import React from 'react';
 
 function Loading() {
-    return (
-        <div>
-            <div className="progress">
-                <span>.</span>
-                <span>.</span>
-                <span>.</span>
-            </div>
-            <style jsx>{`
+  return (
+    <div>
+      <div className="progress">
+        <span>.</span>
+        <span>.</span>
+        <span>.</span>
+      </div>
+      <style jsx>
+        {`
                 .progress span{
                     transition: all 1000ms ease;
                     display: inline-block;
@@ -27,9 +28,10 @@ function Loading() {
                     transform: translate(0, -15px); 
                     }  
                 }
-`}</style>
-        </div>
-    )
+`}
+      </style>
+    </div>
+  );
 }
 
-export default Loading
+export default Loading;
