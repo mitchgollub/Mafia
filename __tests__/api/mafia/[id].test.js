@@ -1,4 +1,5 @@
 import roleDescriptions from '../../../configuration/roleDescriptions.json';
+import PlayerResponse from '../../../models/playerResponse';
 
 const mockMySql = require('serverless-mysql');
 const mafia = require('../../../pages/api/mafia/[id]');
@@ -38,7 +39,7 @@ test('Creates Player', async () => {
   expect(actual.json).toEqual(expected);
 });
 
-test('Returns \'Empty\' when no players available', async () => {
+test('Returns Empty when no players available', async () => {
   const req = {
     query: {
       id: 'AAAA',
@@ -49,12 +50,12 @@ test('Returns \'Empty\' when no players available', async () => {
       session: 'guid',
     },
   };
-  const expected = {
+  const expected = new PlayerResponse({
     id: 'AAAA',
     name: 'Mitch',
     role: 'Empty',
     session: 'guid',
-  };
+  });
 
   mockMySql.setMockDbResonse([
     {
@@ -79,7 +80,7 @@ test('Returns existing player when found', async () => {
       session: 'guid',
     },
   };
-  const expected = {
+  const currentPlayer = {
     id: 'AAAA',
     name: 'Mitch',
     role: 'Cop',
@@ -87,14 +88,21 @@ test('Returns existing player when found', async () => {
     description: roleDescriptions.Cop,
   };
 
+  const expected = new PlayerResponse({
+    id: 'AAAA',
+    name: 'Mitch',
+    role: 'Cop',
+    session: 'guid',
+    description: roleDescriptions.Cop,
+  });
+
   mockMySql.setMockDbResonse([
     {
-      players: JSON.stringify({ current: [expected], available: [] }),
+      players: JSON.stringify({ current: [currentPlayer], available: [] }),
     },
   ]);
 
   const actual = await mafia.default(req, res);
-
 
   expect(actual.statusCode).toEqual(200);
   expect(actual.json).toEqual(expected);

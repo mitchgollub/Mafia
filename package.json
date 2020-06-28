@@ -2,7 +2,7 @@
   "name": "api-routes",
   "version": "1.0.0",
   "scripts": {
-    "dev": "next",
+    "dev": "NODE_OPTIONS='--inspect' next dev",
     "build": "next build",
     "start": "next start",
     "test": "jest --coverage"
@@ -32,8 +32,7 @@
   },
   "husky": {
     "hooks": {
-      "pre-commit": "npx eslint .; npm test",
-      "pre-push": "npx eslint .; npm test"
+      "pre-commit": "eslint .; npm test"
     }
   }
 }
