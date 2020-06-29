@@ -37,23 +37,19 @@ export default class GameRepository {
       }
 
       const cleanedRoles = cleanInput(roles);
-      const availableString = [];
+      const available = [];
       cleanedRoles.forEach((role) => {
         for (let index = 0; index < role.startingValue; index += 1) {
-          availableString.push(role.role);
+          available.push({ id: available.length + 2, role: role.role });
         }
       });
-
-      const available = [];
-      for (let index = 0; index < availableString.length; index += 1) {
-        available.push({ id: index + 2, role: availableString[index] });
-      }
 
       const players = {
         current: [{ id: 1, role: 'Narrator', name: 'YOU' }],
         available,
       };
 
+      console.log('players', JSON.stringify(players));
       const resp = await db.query(escape`INSERT INTO Games(game_code, players)
       VALUES(${code}, ${JSON.stringify(players)})`);
 
@@ -63,6 +59,7 @@ export default class GameRepository {
 
       return new Game({ code, players: players.current });
     };
+
     this.getGame = async function getGame(code) {
       const resp = await db.query(escape`SELECT players FROM Games WHERE game_code = ${code}`);
       console.log(resp);

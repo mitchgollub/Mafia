@@ -1,6 +1,6 @@
+import { string } from 'prop-types';
 import Layout from './layout';
 import Loading from './loading';
-import { string } from 'prop-types';
 
 const MafiaPresentation = ({ role, description, error }) => (
   <Layout>
