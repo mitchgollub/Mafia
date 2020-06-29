@@ -39,12 +39,14 @@ export default class PlayerRepository {
         role: selected.role,
         name: playerRequest.name,
         session: playerRequest.session,
-        description: roleDescriptions[selected.role],
       });
 
       players.current.push(newPlayer);
 
       await db.query(escape`UPDATE Games SET players=${JSON.stringify(players)} WHERE game_code = ${code}`);
+
+      // Description does not need to be stored in db
+      newPlayer.description = roleDescriptions[selected.role];
 
       return newPlayer;
     };
