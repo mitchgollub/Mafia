@@ -1,4 +1,4 @@
-export default class PlayerResponse {
+export default class PlayerView {
   constructor({ id, role, description }) {
     this.id = id;
     this.role = role;

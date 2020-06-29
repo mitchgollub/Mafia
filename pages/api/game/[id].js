@@ -1,4 +1,5 @@
 import GameRepository from '../../../repositories/gameRepository';
+import GameView from '../../../views/gameView';
 
 const gameRepository = new GameRepository();
 
@@ -8,7 +9,10 @@ export default async (req, res) => {
   const game = await gameRepository.getGame(req.query.id);
 
   if (game) {
-    res.status(200).json(game);
+    res.status(200).json(new GameView({
+      code: game.code,
+      players: game.players.current,
+    }));
     return res;
   }
 

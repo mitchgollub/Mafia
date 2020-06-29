@@ -15,8 +15,6 @@ export default class PlayerRepository {
 
       if (existingPlayer) {
         existingPlayer.description = roleDescriptions[existingPlayer.role];
-        existingPlayer.name = playerRequest.name;
-        existingPlayer.session = playerRequest.session;
         return existingPlayer;
       }
 
@@ -41,16 +39,14 @@ export default class PlayerRepository {
         role: selected.role,
         name: playerRequest.name,
         session: playerRequest.session,
+        description: roleDescriptions[selected.role],
       });
 
       players.current.push(newPlayer);
 
       await db.query(escape`UPDATE Games SET players=${JSON.stringify(players)} WHERE game_code = ${code}`);
 
-      return {
-        description: roleDescriptions[selected.role],
-        ...newPlayer,
-      };
+      return newPlayer;
     };
   }
 }

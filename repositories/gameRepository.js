@@ -66,19 +66,9 @@ export default class GameRepository {
     this.getGame = async function getGame(code) {
       const resp = await db.query(escape`SELECT players FROM Games WHERE game_code = ${code}`);
       console.log(resp);
-      if (resp && resp.length && resp[0]) {
+      if (resp && resp.length && resp[0] && resp[0].players) {
         const players = JSON.parse(resp[0].players);
-        return new Game({ code, players: players.current });
-      }
-
-      return null;
-    };
-    this.getFullGame = async function getFullGame(code) {
-      const resp = await db.query(escape`SELECT players FROM Games WHERE game_code = ${code}`);
-
-      if (resp && resp.length && resp[0]) {
-        const players = JSON.parse(resp[0].players);
-        return { code, players };
+        return new Game({ code, players });
       }
 
       return null;

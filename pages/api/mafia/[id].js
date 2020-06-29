@@ -1,5 +1,5 @@
 import PlayerRequest from '../../../models/playerRequest';
-import PlayerResponse from '../../../models/playerResponse';
+import PlayerView from '../../../views/playerView';
 import GameRepository from '../../../repositories/gameRepository';
 import PlayerRepository from '../../../repositories/playerRepository';
 
@@ -13,12 +13,13 @@ export default async (req, res) => {
     const playerRequest = new PlayerRequest(req.body);
     console.log(`playerRequest: ${JSON.stringify(playerRequest)}`);
 
-    const game = await gameRepository.getFullGame(playerRequest.id);
+    const game = await gameRepository.getGame(playerRequest.id);
 
     if (!game) return Error.BadRequest(res, 'Could not find Game');
 
     const player = await playerRepository.addPlayer(game, playerRequest);
-    res.status(200).json(new PlayerResponse({
+
+    res.status(200).json(new PlayerView({
       id: playerRequest.id,
       role: player.role,
       description: player.description,

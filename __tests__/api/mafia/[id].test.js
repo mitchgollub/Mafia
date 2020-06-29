@@ -1,5 +1,5 @@
 import roleDescriptions from '../../../configuration/roleDescriptions.json';
-import PlayerResponse from '../../../models/playerResponse';
+import PlayerView from '../../../views/playerView';
 
 const mockMySql = require('serverless-mysql');
 const mafia = require('../../../pages/api/mafia/[id]');
@@ -50,7 +50,7 @@ test('Returns Empty when no players available', async () => {
       session: 'guid',
     },
   };
-  const expected = new PlayerResponse({
+  const expected = new PlayerView({
     id: 'AAAA',
     name: 'Mitch',
     role: 'Empty',
@@ -88,7 +88,7 @@ test('Returns existing player when found', async () => {
     description: roleDescriptions.Cop,
   };
 
-  const expected = new PlayerResponse({
+  const expected = new PlayerView({
     id: 'AAAA',
     name: 'Mitch',
     role: 'Cop',
