@@ -3,14 +3,14 @@ import Layout from '../components/layout';
 import Loading from '../components/loading';
 import RoleField from '../components/roleField';
 import Roles from '../configuration/roles.json';
-import Game from '../models/game';
+import GameView from '../views/gameView';
 
 export default class Mafia extends Component {
   constructor(props) {
     super(props);
 
     this.state = {
-      game: new Game(),
+      game: new GameView(),
       roles: Roles,
       started: false,
       refresh: false,

@@ -1,4 +1,4 @@
-import Game from '../../../models/game';
+import GameView from '../../../views/gameView';
 
 const mysqlMock = require('serverless-mysql');
 const gameId = require('../../../pages/api/game/[id]');
@@ -17,7 +17,7 @@ test('Returns Game by Id', async () => {
     },
   ]);
 
-  const expectedResponse = new Game({ code: 'AAAA', players: [] });
+  const expectedResponse = new GameView({ code: 'AAAA', players: [] });
 
   const response = await gameId.default(req, res);
 
