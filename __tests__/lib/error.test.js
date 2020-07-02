@@ -1,4 +1,4 @@
-import {InternalServerError, BadRequest} from '../../lib/error';
+import { InternalServerError, BadRequest } from '../../lib/error';
 import res from '../../__mocks__/res';
 
 test('InternalServerError returns 500 w/ error', async () => {

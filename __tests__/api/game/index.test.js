@@ -18,8 +18,10 @@ test('Creates Game', async () => {
   const response = await game(req, res);
 
   expect(response.statusCode).toBe(200);
-  expect(response.json.code).toEqual(expect.stringMatching('^[^\s]{4}$'));
-  expect(response.json.players).toEqual([{ id: 1, name: 'YOU', role: 'Narrator' }]);
+  expect(response.json.code).toEqual(expect.stringMatching('^[^s]{4}$'));
+  expect(response.json.players).toEqual([
+    { id: 1, name: 'YOU', role: 'Narrator' },
+  ]);
 });
 
 test('Handles startingValues > 10', async () => {
@@ -38,8 +40,10 @@ test('Handles startingValues > 10', async () => {
   const response = await game(req, res);
 
   expect(response.statusCode).toBe(200);
-  expect(response.json.code).toEqual(expect.stringMatching('^[^\s]{4}$'));
-  expect(response.json.players).toEqual([{ id: 1, name: 'YOU', role: 'Narrator' }]);
+  expect(response.json.code).toEqual(expect.stringMatching('^[^s]{4}$'));
+  expect(response.json.players).toEqual([
+    { id: 1, name: 'YOU', role: 'Narrator' },
+  ]);
 });
 
 test('Handles null startingValues', async () => {
@@ -58,8 +62,10 @@ test('Handles null startingValues', async () => {
   const response = await game(req, res);
 
   expect(response.statusCode).toBe(200);
-  expect(response.json.code).toEqual(expect.stringMatching('^[^\s]{4}$'));
-  expect(response.json.players).toEqual([{ id: 1, name: 'YOU', role: 'Narrator' }]);
+  expect(response.json.code).toEqual(expect.stringMatching('^[^s]{4}$'));
+  expect(response.json.players).toEqual([
+    { id: 1, name: 'YOU', role: 'Narrator' },
+  ]);
 });
 
 test('Returns 400 on error', async () => {

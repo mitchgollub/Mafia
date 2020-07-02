@@ -28,7 +28,10 @@ test('Creates Player', async () => {
 
   mockMySql.setMockDbResonse([
     {
-      players: JSON.stringify({ current: [], available: [{ role: 'Cop', id: 1 }] }),
+      players: JSON.stringify({
+        current: [],
+        available: [{ role: 'Cop', id: 1 }],
+      }),
     },
   ]);
   mockMySql.setMockDbResonse([]);

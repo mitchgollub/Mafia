@@ -1,6 +1,6 @@
 import GameView from '../../../views/gameView';
 import mysqlMock from 'serverless-mysql';
-import gameId from '../../../pages/api/game/[id]'
+import gameId from '../../../pages/api/game/[id]';
 import res from '../../../__mocks__/res';
 
 test('Returns Game by Id', async () => {
@@ -31,11 +31,9 @@ test('Returns 500 on error', async () => {
     },
   };
 
-  mysqlMock.setMockDbResonse(
-    {
-      error: 'Error',
-    },
-  );
+  mysqlMock.setMockDbResonse({
+    error: 'Error',
+  });
 
   const response = await gameId(req, res);
 
