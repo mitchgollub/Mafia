@@ -1,8 +1,7 @@
 import GameView from '../../../views/gameView';
-
-const mysqlMock = require('serverless-mysql');
-const gameId = require('../../../pages/api/game/[id]');
-const res = require('../../../__mocks__/res');
+import mysqlMock from 'serverless-mysql';
+import gameId from '../../../pages/api/game/[id]'
+import res from '../../../__mocks__/res';
 
 test('Returns Game by Id', async () => {
   const req = {
@@ -19,7 +18,7 @@ test('Returns Game by Id', async () => {
 
   const expectedResponse = new GameView({ code: 'AAAA', players: [] });
 
-  const response = await gameId.default(req, res);
+  const response = await gameId(req, res);
 
   expect(response.statusCode).toBe(200);
   expect(response.json).toStrictEqual(expectedResponse);
@@ -38,7 +37,7 @@ test('Returns 500 on error', async () => {
     },
   );
 
-  const response = await gameId.default(req, res);
+  const response = await gameId(req, res);
 
   expect(response.statusCode).toBe(500);
 });

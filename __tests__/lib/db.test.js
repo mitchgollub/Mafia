@@ -1,5 +1,5 @@
-const mysqlMock = require('serverless-mysql');
-const db = require('../../lib/db');
+import mysqlMock from 'serverless-mysql';
+import { query } from '../../lib/db';
 
 test('query returns query results', async () => {
   const resp = [
@@ -11,7 +11,7 @@ test('query returns query results', async () => {
 
   mysqlMock.setMockDbResonse(resp);
 
-  const actual = await db.query('select username, password from users;');
+  const actual = await query('select username, password from users;');
 
   expect(actual).toEqual(resp);
 });

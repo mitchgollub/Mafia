@@ -1,3 +1,4 @@
+// eslint-disable-next-line @typescript-eslint/no-var-requires
 const mysql = require('serverless-mysql');
 
 const db = mysql({

@@ -1,8 +1,8 @@
 import Player from '../models/player';
 import roleDescriptions from '../configuration/roleDescriptions.json';
 
-const escape = require('sql-template-strings');
-const db = require('../lib/db');
+import { query } from '../lib/db';
+import escape from 'sql-template-strings';
 
 export default class PlayerRepository {
   constructor() {
@@ -43,7 +43,7 @@ export default class PlayerRepository {
 
       players.current.push(newPlayer);
 
-      await db.query(escape`UPDATE Games SET players=${JSON.stringify(players)} WHERE game_code = ${code}`);
+      await query(escape`UPDATE Games SET players=${JSON.stringify(players)} WHERE game_code = ${code}`);
 
       // Description does not need to be stored in db
       newPlayer.description = roleDescriptions[selected.role];
