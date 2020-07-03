@@ -1,10 +1,4 @@
-export default class GameRequestRole {
-  constructor({ role, roleName, startingValue }: GameRequestRole) {
-    this.role = role || '';
-    this.roleName = roleName || '';
-    this.startingValue = startingValue;
-  }
-
+export default interface GameRequestRole {
   role: string;
   roleName: string;
   startingValue: string;

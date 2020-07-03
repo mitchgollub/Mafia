@@ -7,7 +7,7 @@ const gameRepository = new GameRepository();
 export default async (
   req: NextApiRequest,
   res: NextApiResponse<GameView | null>,
-) => {
+): Promise<NextApiResponse<GameView | null>> => {
   console.log(`id: ${req.query.id}`);
 
   const game = await gameRepository.getGame(req.query.id as string);

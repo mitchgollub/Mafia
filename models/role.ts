@@ -1,10 +1,4 @@
-export default class Role {
-  constructor({ role, roleName, startingValue }: Role) {
-    this.role = role || '';
-    this.roleName = roleName || '';
-    this.startingValue = startingValue;
-  }
-
+export default interface Role {
   role: string;
   roleName: string;
   startingValue: number;
