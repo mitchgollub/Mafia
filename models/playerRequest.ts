@@ -8,5 +8,4 @@ export default class PlayerRequest {
   id: string;
   name: string;
   session: string;
-
 }

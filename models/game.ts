@@ -1,6 +1,5 @@
-import Player from "./player";
-import AvailableRole from "./availableRole";
-import CurrentRole from "./currentRole";
+import AvailableRole from './availableRole';
+import CurrentRole from './currentRole';
 
 export default class Game {
   constructor({ code, players }: Partial<Game> = {}) {
@@ -10,7 +9,6 @@ export default class Game {
 
   code: string;
   players: PlayerAssignments;
-
 }
 
 interface PlayerAssignments {

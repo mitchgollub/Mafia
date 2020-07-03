@@ -1,4 +1,4 @@
-import CurrentRole from "../models/currentRole";
+import CurrentRole from '../models/currentRole';
 
 export default class GameView {
   constructor({ code, players }: GameView = {}) {

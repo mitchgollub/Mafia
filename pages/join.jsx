@@ -24,27 +24,40 @@ class Join extends React.Component {
 
   handleSubmit(event) {
     event.preventDefault();
-    this.props.router.push(`/mafia?id=${this.state.code}&name=${this.state.name}&session=${uuidv4()}`);
+    this.props.router.push(
+      `/mafia?id=${this.state.code}&name=${
+        this.state.name
+      }&session=${uuidv4()}`,
+    );
   }
 
   render() {
     return (
       <Layout>
-        <form className="flex-item container-column container__align-center" onSubmit={this.handleSubmit}>
+        <form
+          className="flex-item container-column container__align-center"
+          onSubmit={this.handleSubmit}
+        >
           <div className="flex-item margin">
             <label>
-              <span>
-                Enter Name
-              </span>
-              <input className="margin" type="text" value={this.state.name} onChange={this.handleNameChange} />
+              <span>Enter Name</span>
+              <input
+                className="margin"
+                type="text"
+                value={this.state.name}
+                onChange={this.handleNameChange}
+              />
             </label>
           </div>
           <div className="flex-item margin">
             <label>
-              <span>
-                Enter Game Code
-              </span>
-              <input className="margin" type="text" value={this.state.code} onChange={this.handleCodeChange} />
+              <span>Enter Game Code</span>
+              <input
+                className="margin"
+                type="text"
+                value={this.state.code}
+                onChange={this.handleCodeChange}
+              />
             </label>
           </div>
           <input className="flex-item button" type="submit" value="Submit" />

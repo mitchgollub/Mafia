@@ -1,11 +1,7 @@
 import React from 'react';
-import {
-  string, bool, number, func,
-} from 'prop-types';
+import { string, bool, number, func } from 'prop-types';
 
-function roleField({
-  role, roleName, value, started, handleChange,
-}) {
+function roleField({ role, roleName, value, started, handleChange }) {
   return (
     <>
       <div className="flex-item__grow" />

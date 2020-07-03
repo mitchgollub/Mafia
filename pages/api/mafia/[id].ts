@@ -8,8 +8,10 @@ import { NextApiRequest, NextApiResponse } from 'next';
 const gameRepository = new GameRepository();
 const playerRepository = new PlayerRepository();
 
-
-export default async (req: NextApiRequest, res: NextApiResponse): Promise<NextApiResponse> => {
+export default async (
+  req: NextApiRequest,
+  res: NextApiResponse,
+): Promise<NextApiResponse> => {
   try {
     const playerRequest = new PlayerRequest(req.body);
     console.log(`playerRequest: ${JSON.stringify(playerRequest)}`);
@@ -20,11 +22,13 @@ export default async (req: NextApiRequest, res: NextApiResponse): Promise<NextAp
 
     const player = await playerRepository.addPlayer(game, playerRequest);
 
-    res.status(200).json(new PlayerView({
-      id: playerRequest.id,
-      role: player.role,
-      description: player.description,
-    }));
+    res.status(200).json(
+      new PlayerView({
+        id: playerRequest.id,
+        role: player.role,
+        description: player.description,
+      }),
+    );
 
     return res;
   } catch (error) {

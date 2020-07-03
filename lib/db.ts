@@ -9,11 +9,17 @@ const db = mysql({
     user: process.env.MYSQL_USER,
     password: process.env.MYSQL_PASSWORD,
   },
-  onConnectError: (e: QueryError) => { console.error(`MySQL Connection Error: ${e.code}`); },
-  onError: (e: QueryError) => { console.error(`MySQL Error: ${e.code}`); },
+  onConnectError: (e: QueryError) => {
+    console.error(`MySQL Connection Error: ${e.code}`);
+  },
+  onError: (e: QueryError) => {
+    console.error(`MySQL Error: ${e.code}`);
+  },
 });
 
-export async function query(query: SQLStatement): Promise<RowDataPacket[] | null> {
+export async function query(
+  query: SQLStatement,
+): Promise<RowDataPacket[] | null> {
   try {
     const results: RowDataPacket[] | MySQLError = await db.query(query);
     await db.end();
@@ -23,7 +29,6 @@ export async function query(query: SQLStatement): Promise<RowDataPacket[] | null
     }
 
     return results as RowDataPacket[];
-
   } catch (error) {
     return null;
   }

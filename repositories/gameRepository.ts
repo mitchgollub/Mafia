@@ -4,7 +4,6 @@ import { query } from '../lib/db';
 import escape from 'sql-template-strings';
 import AvailableRole from '../models/availableRole';
 
-
 function cleanNumber(input: number): number {
   if (input && Number.isInteger(input) && input <= 10 && input >= 0) {
     return input;
@@ -36,7 +35,9 @@ export default class GameRepository {
     const available: AvailableRole[] = [];
     cleanedRoles.forEach((role) => {
       for (let index = 0; index < role.startingValue; index += 1) {
-        available.push(new AvailableRole({ id: available.length + 2, role: role.role }));
+        available.push(
+          new AvailableRole({ id: available.length + 2, role: role.role }),
+        );
       }
     });
 
@@ -56,7 +57,9 @@ export default class GameRepository {
   };
 
   getGame = async function getGame(code: string): Promise<Game | null> {
-    const resp = await query(escape`SELECT players FROM Games WHERE game_code = ${code}`);
+    const resp = await query(
+      escape`SELECT players FROM Games WHERE game_code = ${code}`,
+    );
     console.log(resp);
     if (resp && resp.length && resp[0] && resp[0].players) {
       const players = JSON.parse(resp[0].players);

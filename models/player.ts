@@ -1,7 +1,5 @@
 export default class Player {
-  constructor({
-    id, role, name, session, description,
-  }: Player) {
+  constructor({ id, role, name, session, description }: Player) {
     this.id = id;
     this.role = role;
     this.name = name;

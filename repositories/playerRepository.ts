@@ -1,11 +1,15 @@
 import escape from 'sql-template-strings';
-import Player from '../models/';
+import Player from '../models/player';
 import roleDescriptions from '../configuration/roleDescriptions.json';
-
 import { query } from '../lib/db';
+import Game from '../models/game';
+import PlayerRequest from '../models/playerRequest';
 
 export default class PlayerRepository {
-  addPlayer = async function addPlayer(game, playerRequest) {
+  addPlayer = async function addPlayer(
+    game: Game,
+    playerRequest: PlayerRequest,
+  ): Promise<Player> {
     const { code, players } = game;
 
     // Check if player's session already exists in case of refresh
@@ -14,7 +18,8 @@ export default class PlayerRepository {
     );
 
     if (existingPlayer) {
-      existingPlayer.description = roleDescriptions[existingPlayer.role];
+      existingPlayer.description =
+        roleDescriptions[existingPlayer.role as keyof typeof roleDescriptions];
       return existingPlayer;
     }
 

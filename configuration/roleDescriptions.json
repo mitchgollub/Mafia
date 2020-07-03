@@ -1,7 +1,7 @@
 {
-    "Cop": "As a Cop, your role is to stop the Mafia.  During Night Time, the narrator will direct you to open your eyes and accuse one player of being a member of the mafia.  If you are correct, the Mafia member will die come Day Time.",
-    "Mafia": "As a Mafia, your goal is to secretly kill all the Townsfolk.  During Night Time, the narrator will direct you to open your eyes and select one player to kill.  If your attempt is successful, the narrator will announce your kill at Day Time.",
-    "Doctor": "Doctors have the ability to save other players from a Mafia murder.  At Night Time, the narrator will direct you to select one player to save.  If you were successful, the narrator will declare that no one was murdered.",
-    "Town Watch": "The Town Watch can learn about the identity of one player per round.  At Night Time, the narrator will ask who you would like to learn about.  They will signal the role of the player to you in secret.",
-    "Townsfolk": "Townsfolk don't have any specific role during Night Time, but are very important to the game.  Use your negotiating skills during the Day Time round to keep yourself alive and vote out the Mafia!"
+  "Cop": "As a Cop, your role is to stop the Mafia.  During Night Time, the narrator will direct you to open your eyes and accuse one player of being a member of the mafia.  If you are correct, the Mafia member will die come Day Time.",
+  "Mafia": "As a Mafia, your goal is to secretly kill all the Townsfolk.  During Night Time, the narrator will direct you to open your eyes and select one player to kill.  If your attempt is successful, the narrator will announce your kill at Day Time.",
+  "Doctor": "Doctors have the ability to save other players from a Mafia murder.  At Night Time, the narrator will direct you to select one player to save.  If you were successful, the narrator will declare that no one was murdered.",
+  "Town Watch": "The Town Watch can learn about the identity of one player per round.  At Night Time, the narrator will ask who you would like to learn about.  They will signal the role of the player to you in secret.",
+  "Townsfolk": "Townsfolk don't have any specific role during Night Time, but are very important to the game.  Use your negotiating skills during the Day Time round to keep yourself alive and vote out the Mafia!"
 }

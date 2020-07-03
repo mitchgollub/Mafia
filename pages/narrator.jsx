@@ -23,7 +23,9 @@ export default class Mafia extends Component {
 
   handleChange(event) {
     const update = this.state.roles;
-    const targetIndex = update.findIndex((role) => role.role === event.target.name);
+    const targetIndex = update.findIndex(
+      (role) => role.role === event.target.name,
+    );
     update[targetIndex].startingValue = event.target.value;
     this.setState({ roles: update });
   }
@@ -39,31 +41,35 @@ export default class Mafia extends Component {
         'Content-Type': 'application/json',
       },
       body: JSON.stringify(this.state.roles),
-    })
-      .then((res) => res.json()
-        .then((game) => {
-          console.log(game);
-          this.setState({ game });
-        }));
+    }).then((res) =>
+      res.json().then((game) => {
+        console.log(game);
+        this.setState({ game });
+      }),
+    );
   }
 
   checkGameStatus() {
     this.setState({ refresh: true });
-    fetch(`/api/game/${this.state.game.code}`)
-      .then((res) => res.json()
-        .then((game) => {
-          this.setState({ game });
-          this.setState({ refresh: false });
-        }));
+    fetch(`/api/game/${this.state.game.code}`).then((res) =>
+      res.json().then((game) => {
+        this.setState({ game });
+        this.setState({ refresh: false });
+      }),
+    );
   }
 
   render() {
     return (
       <Layout>
         <div className="flex-item">
-          <form onSubmit={this.handleSubmit} className="container-column container__align-center">
+          <form
+            onSubmit={this.handleSubmit}
+            className="container-column container__align-center"
+          >
             <span className="margin">
-              You are the Narrator.  You understand the rules of the game and will direct players as they play.
+              You are the Narrator. You understand the rules of the game and
+              will direct players as they play.
             </span>
             {this.state.roles.map((role) => (
               <RoleField
@@ -75,11 +81,22 @@ export default class Mafia extends Component {
                 handleChange={this.handleChange}
               />
             ))}
-            <input className="button" type="submit" value="Submit" disabled={this.state.started} />
+            <input
+              className="button"
+              type="submit"
+              value="Submit"
+              disabled={this.state.started}
+            />
           </form>
         </div>
-        <div className="flex-item container-column margin-top-2" style={!this.state.started ? { display: 'none' } : {}}>
-          <div className="flex-item container-column container__align-center" style={this.state.error ? { display: 'none' } : {}}>
+        <div
+          className="flex-item container-column margin-top-2"
+          style={!this.state.started ? { display: 'none' } : {}}
+        >
+          <div
+            className="flex-item container-column container__align-center"
+            style={this.state.error ? { display: 'none' } : {}}
+          >
             <span className="flex-item">
               Others can join your game using this code:
               <b>{this.state.game.code}</b>
@@ -88,10 +105,7 @@ export default class Mafia extends Component {
               <span>Players are listed below:</span>
               {this.state.game.players.map((player) => (
                 <div key={player.id}>
-                  {player.role}
-                  :
-                  {' '}
-                  {player.name}
+                  {player.role}: {player.name}
                 </div>
               ))}
             </div>
@@ -103,8 +117,13 @@ export default class Mafia extends Component {
               {this.state.refresh ? <Loading /> : 'Refresh'}
             </button>
           </div>
-          <div className="flex-item container-column container__align-center" style={!this.state.error ? { display: 'none' } : {}}>
-            <span className="flex-item">Error occurred.  Please refresh and try again.</span>
+          <div
+            className="flex-item container-column container__align-center"
+            style={!this.state.error ? { display: 'none' } : {}}
+          >
+            <span className="flex-item">
+              Error occurred. Please refresh and try again.
+            </span>
           </div>
         </div>
       </Layout>
