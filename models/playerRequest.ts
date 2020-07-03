@@ -1,11 +1,11 @@
 export default class PlayerRequest {
-  constructor({ id, name, session }: PlayerRequest) {
-    this.id = id;
+  constructor({ code, name, session }: PlayerRequest) {
+    this.code = code;
     this.name = name;
     this.session = session;
   }
 
-  id: string;
+  code: string;
   name: string;
   session: string;
 }

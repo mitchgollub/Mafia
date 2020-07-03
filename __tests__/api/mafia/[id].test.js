@@ -15,7 +15,7 @@ test('Creates Player', async () => {
       id: 'AAAA',
     },
     body: {
-      id: 'AAAA',
+      code: 'AAAA',
       name: 'Mitch',
       session: 'guid',
     },
@@ -48,7 +48,7 @@ test('Returns Empty when no players available', async () => {
       id: 'AAAA',
     },
     body: {
-      id: 'AAAA',
+      code: 'AAAA',
       name: 'Mitch',
       session: 'guid',
     },
@@ -78,13 +78,13 @@ test('Returns existing player when found', async () => {
       id: 'AAAA',
     },
     body: {
-      id: 'AAAA',
+      code: 'AAAA',
       name: 'Mitch',
       session: 'guid',
     },
   };
   const currentPlayer = {
-    id: 'AAAA',
+    code: 'AAAA',
     name: 'Mitch',
     role: 'Cop',
     session: 'guid',
@@ -117,7 +117,7 @@ test('Returns 400 when no players available', async () => {
       id: 'AAAA',
     },
     body: {
-      id: 'AAAA',
+      code: 'AAAA',
       name: 'Mitch',
       session: 'guid',
     },
@@ -136,7 +136,7 @@ test('Returns 500 on error', async () => {
       id: 'AAAA',
     },
     body: {
-      id: 'AAAA',
+      code: 'AAAA',
       name: 'Mitch',
       session: 'guid',
     },

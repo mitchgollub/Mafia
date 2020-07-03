@@ -3,10 +3,16 @@ import Role from '../models/role';
 import { query } from '../lib/db';
 import escape from 'sql-template-strings';
 import AvailableRole from '../models/availableRole';
+import GameRequestRole from '../models/gameRequestRole';
 
-function cleanNumber(input: number): number {
-  if (input && Number.isInteger(input) && input <= 10 && input >= 0) {
-    return input;
+function cleanNumber(input: string): number {
+  if (input) {
+    const inputInt = parseInt(input, 10);
+    if (!Number.isNaN(inputInt) && inputInt <= 10 && inputInt >= 0) {
+      return inputInt;
+    }
+
+    console.warn(`value ${inputInt} is not 1-10.  Setting to 0`);
   } else {
     console.warn('startingValue not given.  Setting to 0.');
   }
@@ -14,7 +20,7 @@ function cleanNumber(input: number): number {
   return 0;
 }
 
-function cleanInput(roles: Role[]): Role[] {
+function cleanInput(roles: GameRequestRole[]): Role[] {
   return roles.map((role) => ({
     role: role.role,
     roleName: role.roleName,
@@ -23,7 +29,9 @@ function cleanInput(roles: Role[]): Role[] {
 }
 
 export default class GameRepository {
-  createGame = async function createGame(roles: Role[]): Promise<Game | null> {
+  createGame = async function createGame(
+    roles: GameRequestRole[],
+  ): Promise<Game | null> {
     let code = '';
     const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
     const charactersLength = characters.length;
@@ -42,7 +50,7 @@ export default class GameRepository {
     });
 
     const players = {
-      current: [{ id: 1, role: 'Narrator', name: 'YOU' }],
+      current: [{ id: 1, role: 'Narrator', name: 'YOU', session: '' }],
       available,
     };
 

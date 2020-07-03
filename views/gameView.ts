@@ -1,4 +1,4 @@
-import CurrentRole from '../models/currentRole';
+import Player from '../models/player';
 
 export default class GameView {
   constructor({ code, players }: GameView = {}) {
@@ -7,5 +7,5 @@ export default class GameView {
   }
 
   code?: string;
-  players?: CurrentRole[];
+  players?: Player[];
 }

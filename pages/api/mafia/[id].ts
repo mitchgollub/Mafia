@@ -16,7 +16,7 @@ export default async (
     const playerRequest = new PlayerRequest(req.body);
     console.log(`playerRequest: ${JSON.stringify(playerRequest)}`);
 
-    const game = await gameRepository.getGame(playerRequest.id);
+    const game = await gameRepository.getGame(playerRequest.code);
 
     if (!game) return BadRequest(res, 'Could not find Game');
 
@@ -24,7 +24,7 @@ export default async (
 
     res.status(200).json(
       new PlayerView({
-        id: playerRequest.id,
+        id: playerRequest.code,
         role: player.role,
         description: player.description,
       }),

@@ -20,7 +20,7 @@ test('Creates Game', async () => {
   expect(response.statusCode).toBe(200);
   expect(response.json.code).toEqual(expect.stringMatching('^[^s]{4}$'));
   expect(response.json.players).toEqual([
-    { id: 1, name: 'YOU', role: 'Narrator' },
+    { id: 1, name: 'YOU', role: 'Narrator', session: '' },
   ]);
 });
 
@@ -42,7 +42,7 @@ test('Handles startingValues > 10', async () => {
   expect(response.statusCode).toBe(200);
   expect(response.json.code).toEqual(expect.stringMatching('^[^s]{4}$'));
   expect(response.json.players).toEqual([
-    { id: 1, name: 'YOU', role: 'Narrator' },
+    { id: 1, name: 'YOU', role: 'Narrator', session: '' },
   ]);
 });
 
@@ -64,7 +64,7 @@ test('Handles null startingValues', async () => {
   expect(response.statusCode).toBe(200);
   expect(response.json.code).toEqual(expect.stringMatching('^[^s]{4}$'));
   expect(response.json.players).toEqual([
-    { id: 1, name: 'YOU', role: 'Narrator' },
+    { id: 1, name: 'YOU', role: 'Narrator', session: '' },
   ]);
 });
 

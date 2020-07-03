@@ -7,5 +7,5 @@ export default class PlayerView {
 
   id: string;
   role: string;
-  description: string;
+  description?: string;
 }

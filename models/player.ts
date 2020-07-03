@@ -3,16 +3,19 @@ export default class Player {
     this.id = id;
     this.role = role;
     this.name = name;
-    this.session = session;
+
+    if (session) {
+      this.session = session;
+    }
 
     if (description) {
       this.description = description;
     }
   }
 
-  id: string;
+  id: number;
   role: string;
   name: string;
-  session: string;
+  session?: string;
   description?: string;
 }

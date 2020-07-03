@@ -16,7 +16,7 @@ export default class MafiaContainer extends Component {
       },
       body: JSON.stringify(
         new PlayerRequest({
-          id: this.props.id,
+          code: this.props.id,
           name: this.props.name,
           session: this.props.session,
         }),

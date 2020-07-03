@@ -26,7 +26,7 @@ export default class PlayerRepository {
     // Check if there are available players
     if (!players.available.length) {
       return new Player({
-        id: playerRequest.id,
+        id: -1,
         role: 'Empty',
         name: playerRequest.name,
         session: playerRequest.session,
@@ -55,7 +55,8 @@ export default class PlayerRepository {
     );
 
     // Description does not need to be stored in db
-    newPlayer.description = roleDescriptions[selected.role];
+    newPlayer.description =
+      roleDescriptions[selected.role as keyof typeof roleDescriptions];
 
     return newPlayer;
   };

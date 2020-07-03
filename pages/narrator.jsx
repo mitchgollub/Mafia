@@ -26,7 +26,10 @@ export default class Mafia extends Component {
     const targetIndex = update.findIndex(
       (role) => role.role === event.target.name,
     );
-    update[targetIndex].startingValue = event.target.value;
+    const cleanedStartingValue = parseInt(event.target.value);
+    update[targetIndex].startingValue = !isNaN(cleanedStartingValue)
+      ? cleanedStartingValue
+      : 0;
     this.setState({ roles: update });
   }
 
@@ -53,8 +56,7 @@ export default class Mafia extends Component {
     this.setState({ refresh: true });
     fetch(`/api/game/${this.state.game.code}`).then((res) =>
       res.json().then((game) => {
-        this.setState({ game });
-        this.setState({ refresh: false });
+        this.setState({ game, refresh: false });
       }),
     );
   }

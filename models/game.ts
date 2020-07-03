@@ -1,5 +1,5 @@
 import AvailableRole from './availableRole';
-import CurrentRole from './currentRole';
+import Player from './player';
 
 export default class Game {
   constructor({ code, players }: Partial<Game> = {}) {
@@ -12,6 +12,6 @@ export default class Game {
 }
 
 interface PlayerAssignments {
-  current: CurrentRole[];
+  current: Player[];
   available: AvailableRole[];
 }
