@@ -1,7 +1,8 @@
 import Head from 'next/head';
 import { node } from 'prop-types';
+import { Props, ReactNodeArray } from 'react';
 
-function Layout({ children }) {
+function Layout({ children }: Props<ReactNodeArray>): JSX.Element {
   return (
     <div>
       <Head>

@@ -1,8 +1,13 @@
 import { string } from 'prop-types';
 import Layout from './layout';
 import Loading from './loading';
+import PlayerView from '../views/playerView';
 
-const MafiaPresentation = ({ role, description, error }) => (
+const MafiaPresentation = ({
+  role,
+  description,
+  error,
+}: PlayerView): JSX.Element => (
   <Layout>
     <div
       className="container-column container__align-center"
@@ -34,7 +39,7 @@ const MafiaPresentation = ({ role, description, error }) => (
 MafiaPresentation.propTypes = {
   role: string.isRequired,
   description: string.isRequired,
-  error: string.isRequired,
+  error: string,
 };
 
 export default MafiaPresentation;

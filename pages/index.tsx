@@ -1,7 +1,7 @@
 import Link from 'next/link';
 import Layout from '../components/layout';
 
-function Index() {
+function Index(): JSX.Element {
   return (
     <Layout>
       <h1 style={{ textAlign: 'center', marginBottom: '64px' }}>

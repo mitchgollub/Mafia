@@ -1,6 +1,6 @@
 import React from 'react';
 
-function Loading() {
+function Loading(): JSX.Element {
   return (
     <div>
       <div className="progress">

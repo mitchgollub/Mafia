@@ -4,24 +4,33 @@ import Loading from '../components/loading';
 import RoleField from '../components/roleField';
 import Roles from '../configuration/roles.json';
 import GameView from '../views/gameView';
+import Role from '../models/role';
+
+type NarratorState = {
+  game: GameView;
+  roles: Role[];
+  started: boolean;
+  refresh: boolean;
+  error?: string;
+};
 
 export default class Mafia extends Component {
-  constructor(props) {
+  constructor(props: Readonly<unknown>) {
     super(props);
-
-    this.state = {
-      game: new GameView(),
-      roles: Roles,
-      started: false,
-      refresh: false,
-    };
 
     this.handleChange = this.handleChange.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
     this.checkGameStatus = this.checkGameStatus.bind(this);
   }
 
-  handleChange(event) {
+  state = {
+    game: new GameView(),
+    roles: Roles,
+    started: false,
+    refresh: false,
+  } as Readonly<NarratorState>;
+
+  handleChange(event: React.ChangeEvent<HTMLInputElement>): void {
     const update = this.state.roles;
     const targetIndex = update.findIndex(
       (role) => role.role === event.target.name,
@@ -33,7 +42,7 @@ export default class Mafia extends Component {
     this.setState({ roles: update });
   }
 
-  handleSubmit(event) {
+  handleSubmit(event: React.FormEvent<HTMLFormElement>): void {
     event.preventDefault();
     this.setState({ started: true });
 
@@ -52,7 +61,7 @@ export default class Mafia extends Component {
     );
   }
 
-  checkGameStatus() {
+  checkGameStatus(): void {
     this.setState({ refresh: true });
     fetch(`/api/game/${this.state.game.code}`).then((res) =>
       res.json().then((game) => {
@@ -61,7 +70,7 @@ export default class Mafia extends Component {
     );
   }
 
-  render() {
+  render(): JSX.Element {
     return (
       <Layout>
         <div className="flex-item">
@@ -105,7 +114,7 @@ export default class Mafia extends Component {
             </span>
             <div className="flex-item">
               <span>Players are listed below:</span>
-              {this.state.game.players.map((player) => (
+              {this.state.game?.players?.map((player) => (
                 <div key={player.id}>
                   {player.role}: {player.name}
                 </div>

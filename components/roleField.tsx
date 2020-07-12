@@ -1,7 +1,21 @@
-import React from 'react';
+import { ChangeEvent } from 'react';
 import { string, bool, number, func } from 'prop-types';
 
-function roleField({ role, roleName, value, started, handleChange }) {
+type RoleFieldProps = {
+  role: string;
+  roleName: string;
+  value: number;
+  started: boolean;
+  handleChange: (event: ChangeEvent<HTMLInputElement>) => void;
+};
+
+function roleField({
+  role,
+  roleName,
+  value,
+  started,
+  handleChange,
+}: RoleFieldProps): JSX.Element {
   return (
     <>
       <div className="flex-item__grow" />
@@ -11,7 +25,7 @@ function roleField({ role, roleName, value, started, handleChange }) {
           style={{ maxWidth: '3em' }}
           className="flex-item__grow margin"
           type="number"
-          size="2"
+          size={2}
           min="0"
           max="10"
           name={role}

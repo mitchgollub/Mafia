@@ -1,37 +1,38 @@
-import { withRouter } from 'next/router';
+import { Router, withRouter } from 'next/router';
 import React from 'react';
 import Layout from '../components/layout';
+import * as uuid from 'uuid';
+import PlayerRequest from '../models/playerRequest';
 
-const uuidv4 = require('uuid/v4');
+class Join extends React.Component<{ router: Router }> {
+  state = { name: '', code: '' } as PlayerRequest;
 
-class Join extends React.Component {
-  constructor(props) {
+  constructor(props: { router: Router }) {
     super(props);
-    this.state = { name: '', code: '' };
 
     this.handleNameChange = this.handleNameChange.bind(this);
     this.handleCodeChange = this.handleCodeChange.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
   }
 
-  handleNameChange(event) {
+  handleNameChange(event: React.ChangeEvent<HTMLInputElement>): void {
     this.setState({ name: event.target.value, code: this.state.code });
   }
 
-  handleCodeChange(event) {
+  handleCodeChange(event: React.ChangeEvent<HTMLInputElement>): void {
     this.setState({ name: this.state.name, code: event.target.value });
   }
 
-  handleSubmit(event) {
+  handleSubmit(event: React.FormEvent<HTMLFormElement>): void {
     event.preventDefault();
     this.props.router.push(
-      `/mafia?id=${this.state.code}&name=${
+      `/mafia?code=${this.state.code}&name=${
         this.state.name
-      }&session=${uuidv4()}`,
+      }&session=${uuid.v4()}`,
     );
   }
 
-  render() {
+  render(): JSX.Element {
     return (
       <Layout>
         <form
