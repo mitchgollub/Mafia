@@ -1,6 +1,6 @@
-const mysqlMock = require('serverless-mysql');
-const game = require('../../../pages/api/game/index');
-const res = require('../../../__mocks__/res');
+import mysqlMock from 'serverless-mysql';
+import game from '../../../pages/api/game/index';
+import res from '../../../__mocks__/res';
 
 test('Creates Game', async () => {
   const req = {
@@ -15,11 +15,13 @@ test('Creates Game', async () => {
 
   mysqlMock.setMockDbResonse([]);
 
-  const response = await game.default(req, res);
+  const response = await game(req, res);
 
   expect(response.statusCode).toBe(200);
-  expect(response.json.code).toEqual(expect.stringMatching('^[^\s]{4}$'));
-  expect(response.json.players).toEqual([{ id: 1, name: 'YOU', role: 'Narrator' }]);
+  expect(response.json.code).toEqual(expect.stringMatching('^[^s]{4}$'));
+  expect(response.json.players).toEqual([
+    { id: 1, name: 'YOU', role: 'Narrator', session: '' },
+  ]);
 });
 
 test('Handles startingValues > 10', async () => {
@@ -35,11 +37,13 @@ test('Handles startingValues > 10', async () => {
 
   mysqlMock.setMockDbResonse([]);
 
-  const response = await game.default(req, res);
+  const response = await game(req, res);
 
   expect(response.statusCode).toBe(200);
-  expect(response.json.code).toEqual(expect.stringMatching('^[^\s]{4}$'));
-  expect(response.json.players).toEqual([{ id: 1, name: 'YOU', role: 'Narrator' }]);
+  expect(response.json.code).toEqual(expect.stringMatching('^[^s]{4}$'));
+  expect(response.json.players).toEqual([
+    { id: 1, name: 'YOU', role: 'Narrator', session: '' },
+  ]);
 });
 
 test('Handles null startingValues', async () => {
@@ -55,14 +59,16 @@ test('Handles null startingValues', async () => {
 
   mysqlMock.setMockDbResonse([]);
 
-  const response = await game.default(req, res);
+  const response = await game(req, res);
 
   expect(response.statusCode).toBe(200);
-  expect(response.json.code).toEqual(expect.stringMatching('^[^\s]{4}$'));
-  expect(response.json.players).toEqual([{ id: 1, name: 'YOU', role: 'Narrator' }]);
+  expect(response.json.code).toEqual(expect.stringMatching('^[^s]{4}$'));
+  expect(response.json.players).toEqual([
+    { id: 1, name: 'YOU', role: 'Narrator', session: '' },
+  ]);
 });
 
-test('Returns 500 on error', async () => {
+test('Returns 400 on error', async () => {
   const req = {
     body: [
       {
@@ -75,7 +81,7 @@ test('Returns 500 on error', async () => {
 
   mysqlMock.setMockDbResonse({ error: 'Error' });
 
-  const response = await game.default(req, res);
+  const response = await game(req, res);
 
-  expect(response.statusCode).toBe(500);
+  expect(response.statusCode).toBe(400);
 });

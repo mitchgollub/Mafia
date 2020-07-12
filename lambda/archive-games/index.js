@@ -1,3 +1,4 @@
+// eslint-disable-next-line @typescript-eslint/no-var-requires
 const mysql = require('serverless-mysql');
 
 const db = mysql({
@@ -7,8 +8,12 @@ const db = mysql({
     user: process.env.MYSQL_USER,
     password: process.env.MYSQL_PASSWORD,
   },
-  onConnectError: (e) => { console.error(`MySQL Connection Error: ${e.code}`); },
-  onError: (e) => { console.error(`MySQL Error: ${e.code}`); },
+  onConnectError: (e) => {
+    console.error(`MySQL Connection Error: ${e.code}`);
+  },
+  onError: (e) => {
+    console.error(`MySQL Error: ${e.code}`);
+  },
 });
 
 const archiveGames = async () => {

@@ -1,7 +1,8 @@
 import Head from 'next/head';
 import { node } from 'prop-types';
+import { Props, ReactNodeArray } from 'react';
 
-function Layout({ children }) {
+function Layout({ children }: Props<ReactNodeArray>): JSX.Element {
   return (
     <div>
       <Head>
@@ -10,62 +11,60 @@ function Layout({ children }) {
       </Head>
       <div className="container">
         <div className="flex-item__grow" />
-        <div className="flex-item">
-          {children}
-        </div>
+        <div className="flex-item">{children}</div>
         <div className="flex-item__grow" />
       </div>
       <style jsx global>
         {`
-        body {
+          body {
             background-color: white;
-        }
-        
-        .button {
+          }
+
+          .button {
             background-color: pink;
             padding: 20px;
             margin: 20px;
             text-align: center;
             border: none;
-        }
-        
-        .container {
+          }
+
+          .container {
             display: flex;
-        }
-        
-        .container-column {
+          }
+
+          .container-column {
             display: flex;
             flex-direction: column;
-        }
+          }
 
-        .container__align-center {
+          .container__align-center {
             align-items: center;
-        }
-        
-        .flex-item {
+          }
+
+          .flex-item {
             flex: auto;
-        }
-        
-        .flex-item__grow {
+          }
+
+          .flex-item__grow {
             flex-grow: 1;
-        }
-        
-        .flex-shrink {
+          }
+
+          .flex-shrink {
             flex-grow: 0;
-        }
-        
-        .margin {
+          }
+
+          .margin {
             margin: 1em;
-        }
-        
-        .margin-top {
+          }
+
+          .margin-top {
             margin-top: 1em;
-        }
-        
-        .margin-top-2 {
+          }
+
+          .margin-top-2 {
             margin-top: 2em;
-        }
-    `}
+          }
+        `}
       </style>
     </div>
   );
