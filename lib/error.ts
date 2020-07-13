@@ -3,11 +3,12 @@ import { NextApiResponse } from 'next';
 function setStatus(
   res: NextApiResponse,
   code: number,
-  message: string,
+  message?: string,
 ): NextApiResponse {
   console.error(message);
   res.status(code).json({
     error: code,
+    message: message,
   });
   return res;
 }
@@ -17,7 +18,7 @@ export function InternalServerError(
   error: Error,
 ): NextApiResponse {
   console.error(error.stack);
-  return setStatus(res, 500, `Internal Server Error: ${error}`);
+  return setStatus(res, 500);
 }
 export function BadRequest(
   res: NextApiResponse,

@@ -4,21 +4,37 @@ import GameRepository from '../../../repositories/gameRepository';
 import PlayerRepository from '../../../repositories/playerRepository';
 import { InternalServerError, BadRequest } from '../../../lib/error';
 import { NextApiRequest, NextApiResponse } from 'next';
+import Joi from '@hapi/joi';
 
 const gameRepository = new GameRepository();
 const playerRepository = new PlayerRepository();
+
+const schema = Joi.object({
+  code: Joi.string().required(),
+  name: Joi.string().required(),
+  session: Joi.string().required(),
+});
 
 export default async (
   req: NextApiRequest,
   res: NextApiResponse,
 ): Promise<NextApiResponse> => {
   try {
+    console.log(`Request Body: ${JSON.stringify(req.body)}`);
+
+    const { error } = schema.validate(req.body);
+
+    if (error) {
+      return BadRequest(res, error.message);
+    }
+
     const playerRequest = new PlayerRequest(req.body);
-    console.log(`playerRequest: ${JSON.stringify(playerRequest)}`);
 
     const game = await gameRepository.getGame(playerRequest.code);
 
-    if (!game) return BadRequest(res, 'Could not find Game');
+    if (!game) {
+      return BadRequest(res, 'Could not find Game');
+    }
 
     const player = await playerRepository.addPlayer(game, playerRequest);
 

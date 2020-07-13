@@ -2,6 +2,10 @@ import mysqlMock from 'serverless-mysql';
 import game from '../../../pages/api/game/index';
 import res from '../../../__mocks__/res';
 
+beforeEach(async () => {
+  mysqlMock.clearMockDbResponse();
+});
+
 test('Creates Game', async () => {
   const req = {
     body: [
@@ -39,11 +43,7 @@ test('Handles startingValues > 10', async () => {
 
   const response = await game(req, res);
 
-  expect(response.statusCode).toBe(200);
-  expect(response.json.code).toEqual(expect.stringMatching('^[^s]{4}$'));
-  expect(response.json.players).toEqual([
-    { id: 1, name: 'YOU', role: 'Narrator', session: '' },
-  ]);
+  expect(response.statusCode).toBe(400);
 });
 
 test('Handles null startingValues', async () => {
@@ -61,14 +61,10 @@ test('Handles null startingValues', async () => {
 
   const response = await game(req, res);
 
-  expect(response.statusCode).toBe(200);
-  expect(response.json.code).toEqual(expect.stringMatching('^[^s]{4}$'));
-  expect(response.json.players).toEqual([
-    { id: 1, name: 'YOU', role: 'Narrator', session: '' },
-  ]);
+  expect(response.statusCode).toBe(400);
 });
 
-test('Returns 400 on error', async () => {
+test('Returns 500 on error', async () => {
   const req = {
     body: [
       {
@@ -83,5 +79,5 @@ test('Returns 400 on error', async () => {
 
   const response = await game(req, res);
 
-  expect(response.statusCode).toBe(400);
+  expect(response.statusCode).toBe(500);
 });

@@ -17,21 +17,15 @@ const db = mysql({
   },
 });
 
-export async function query(
-  query: SQLStatement,
-): Promise<RowDataPacket[] | null> {
-  try {
-    const results: RowDataPacket[] | MySQLError = await db.query(query);
-    await db.end();
+export async function query(query: SQLStatement): Promise<RowDataPacket[]> {
+  const results: RowDataPacket[] | MySQLError = await db.query(query);
+  await db.end();
 
-    if ((results as MySQLError).error) {
-      return null;
-    }
-
-    return results as RowDataPacket[];
-  } catch (error) {
-    return null;
+  if ((results as MySQLError).error) {
+    throw new Error(results.toString());
   }
+
+  return results as RowDataPacket[];
 }
 
 interface MySQLError {
