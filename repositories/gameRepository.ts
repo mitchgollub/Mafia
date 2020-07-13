@@ -1,32 +1,8 @@
 import Game from '../models/game';
-import Role from '../models/role';
 import { query } from '../lib/db';
 import escape from 'sql-template-strings';
 import AvailableRole from '../models/availableRole';
 import GameRequestRole from '../models/gameRequestRole';
-
-function cleanNumber(input: string): number {
-  if (input) {
-    const inputInt = parseInt(input, 10);
-    if (!Number.isNaN(inputInt) && inputInt <= 10 && inputInt >= 0) {
-      return inputInt;
-    }
-
-    console.warn(`value ${inputInt} is not 1-10.  Setting to 0`);
-  } else {
-    console.warn('startingValue not given.  Setting to 0.');
-  }
-
-  return 0;
-}
-
-function cleanInput(roles: GameRequestRole[]): Role[] {
-  return roles.map((role) => ({
-    role: role.role,
-    roleName: role.roleName,
-    startingValue: cleanNumber(role.startingValue),
-  }));
-}
 
 export default class GameRepository {
   createGame = async function createGame(
@@ -39,9 +15,8 @@ export default class GameRepository {
       code += characters.charAt(Math.floor(Math.random() * charactersLength));
     }
 
-    const cleanedRoles = cleanInput(roles);
     const available: AvailableRole[] = [];
-    cleanedRoles.forEach((role) => {
+    roles.forEach((role) => {
       for (let index = 0; index < role.startingValue; index += 1) {
         available.push(
           new AvailableRole({ id: available.length + 2, role: role.role }),

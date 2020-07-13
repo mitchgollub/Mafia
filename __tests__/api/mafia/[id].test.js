@@ -111,7 +111,7 @@ test('Returns existing player when found', async () => {
   expect(actual.json).toEqual(expected);
 });
 
-test('Returns 400 when no players available', async () => {
+test('Returns 200 when no players available', async () => {
   const req = {
     query: {
       id: 'AAAA',
@@ -123,11 +123,23 @@ test('Returns 400 when no players available', async () => {
     },
   };
 
-  mockMySql.setMockDbResonse({ error: 'Error' });
+  const expected = new PlayerView({
+    id: 'AAAA',
+    name: 'Mitch',
+    role: 'Empty',
+    session: 'guid',
+  });
+
+  mockMySql.setMockDbResonse([
+    {
+      players: JSON.stringify({ current: [], available: [] }),
+    },
+  ]);
 
   const actual = await mafia(req, res);
 
-  expect(actual.statusCode).toEqual(400);
+  expect(actual.statusCode).toEqual(200);
+  expect(actual.json).toEqual(expected);
 });
 
 test('Returns 500 on error', async () => {
