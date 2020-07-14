@@ -10,7 +10,7 @@ const schema = Joi.array().items(
   Joi.object({
     role: Joi.string().required(),
     roleName: Joi.string().required(),
-    startingValue: Joi.number().min(1).max(10).required(),
+    startingValue: Joi.number().min(0).max(10).required(),
   }),
 );
 
