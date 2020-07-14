@@ -1,4 +1,5 @@
 import React from 'react';
+import ky from 'ky/umd';
 import MafiaPresentation from '../components/mafiaPresentation';
 import PlayerRequest from '../models/playerRequest';
 import PlayerView from '../views/playerView';
@@ -20,23 +21,17 @@ export default class MafiaContainer extends React.Component<PlayerRequest> {
   } as PlayerView;
 
   async componentDidMount(): Promise<void> {
-    const res = await fetch(`/api/mafia/${this.props.code}`, {
-      method: 'POST',
-      headers: {
-        Accept: 'application/json',
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify(
-        new PlayerRequest({
-          code: this.props.code,
-          name: this.props.name,
-          session: this.props.session,
-        }),
-      ),
-    });
-    const state = await res.json();
-    console.warn('mafia state', JSON.stringify(state));
-    this.setState(state);
+    this.setState(
+      await ky
+        .post(`/api/mafia/${this.props.code}`, {
+          json: new PlayerRequest({
+            code: this.props.code,
+            name: this.props.name,
+            session: this.props.session,
+          }),
+        })
+        .json(),
+    );
   }
 
   render = (): JSX.Element => (

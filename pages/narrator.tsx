@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import ky from 'ky/umd';
 import Layout from '../components/layout';
 import Loading from '../components/loading';
 import RoleField from '../components/roleField';
@@ -42,32 +43,24 @@ export default class Mafia extends Component {
     this.setState({ roles: update });
   }
 
-  handleSubmit(event: React.FormEvent<HTMLFormElement>): void {
+  async handleSubmit(event: React.FormEvent<HTMLFormElement>): Promise<void> {
     event.preventDefault();
     this.setState({ started: true });
 
-    fetch('/api/game', {
-      method: 'POST',
-      headers: {
-        Accept: 'application/json',
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify(this.state.roles),
-    }).then((res) =>
-      res.json().then((game) => {
-        console.log(game);
-        this.setState({ game });
-      }),
-    );
+    const game = await ky
+      .post('/api/game', {
+        json: this.state.roles,
+      })
+      .json();
+
+    console.log(game);
+    this.setState({ game });
   }
 
-  checkGameStatus(): void {
+  async checkGameStatus(): Promise<void> {
     this.setState({ refresh: true });
-    fetch(`/api/game/${this.state.game.code}`).then((res) =>
-      res.json().then((game) => {
-        this.setState({ game, refresh: false });
-      }),
-    );
+    const game = await ky.post(`/api/game/${this.state.game.code}`).json();
+    this.setState({ game, refresh: false });
   }
 
   render(): JSX.Element {
@@ -89,7 +82,7 @@ export default class Mafia extends Component {
                 roleName={role.roleName}
                 value={role.startingValue}
                 started={this.state.started}
-                handleChange={this.handleChange}
+                handleChange={async (event) => await this.handleChange(event)}
               />
             ))}
             <input
@@ -122,7 +115,7 @@ export default class Mafia extends Component {
             </div>
             <button
               className="button flex-item"
-              onClick={this.checkGameStatus}
+              onClick={async () => await this.checkGameStatus()}
               disabled={this.state.refresh}
             >
               {this.state.refresh ? <Loading /> : 'Refresh'}
