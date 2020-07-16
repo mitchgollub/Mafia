@@ -3,11 +3,10 @@ import GameView from '../../../views/gameView';
 import { NextApiRequest, NextApiResponse } from 'next';
 import { BadRequest, InternalServerError } from '../../../lib/error';
 
-const gameRepository = new GameRepository();
-
 export default async (
   req: NextApiRequest,
   res: NextApiResponse<GameView | null>,
+  gameRepository: GameRepository = new GameRepository(),
 ): Promise<NextApiResponse<GameView | null>> => {
   try {
     console.log(`id: ${req.query.id}`);

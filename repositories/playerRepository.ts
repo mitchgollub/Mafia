@@ -1,9 +1,10 @@
-import escape from 'sql-template-strings';
 import Player from '../models/player';
 import roleDescriptions from '../configuration/roleDescriptions.json';
-import { query } from '../lib/db';
 import Game from '../models/game';
 import PlayerRequest from '../models/playerRequest';
+import { MongoDb } from '../lib/mongodb';
+
+const client = new MongoDb();
 
 export default class PlayerRepository {
   addPlayer = async function addPlayer(
@@ -48,11 +49,7 @@ export default class PlayerRepository {
 
     players.current.push(newPlayer);
 
-    await query(
-      escape`UPDATE Games SET players=${JSON.stringify(
-        players,
-      )} WHERE game_code = ${code}`,
-    );
+    client.updateGameDocument(new Game({ code: game.code, players }));
 
     // Description does not need to be stored in db
     newPlayer.description =

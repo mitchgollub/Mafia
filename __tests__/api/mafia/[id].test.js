@@ -1,13 +1,7 @@
 import roleDescriptions from '../../../configuration/roleDescriptions.json';
 import PlayerView from '../../../views/playerView';
-
-import mockMySql from 'serverless-mysql';
 import mafia from '../../../pages/api/mafia/[id]';
 import res from '../../../__mocks__/res';
-
-beforeEach(() => {
-  mockMySql.clearMockDbResponse();
-});
 
 test('Creates Player', async () => {
   const req = {
@@ -26,17 +20,24 @@ test('Creates Player', async () => {
     description: roleDescriptions.Cop,
   };
 
-  mockMySql.setMockDbResonse([
-    {
-      players: JSON.stringify({
+  const gameRepository = {
+    getGame: jest.fn().mockResolvedValue({
+      code: 'AAAA',
+      players: {
         current: [],
         available: [{ role: 'Cop', id: 1 }],
-      }),
-    },
-  ]);
-  mockMySql.setMockDbResonse([]);
+      },
+    }),
+  };
 
-  const actual = await mafia(req, res);
+  const playerRepository = {
+    addPlayer: jest.fn().mockResolvedValue({
+      role: 'Cop',
+      description: roleDescriptions.Cop,
+    }),
+  };
+
+  const actual = await mafia(req, res, gameRepository, playerRepository);
 
   expect(actual.statusCode).toEqual(200);
   expect(actual.json).toEqual(expected);
@@ -60,13 +61,26 @@ test('Returns Empty when no players available', async () => {
     session: 'guid',
   });
 
-  mockMySql.setMockDbResonse([
-    {
-      players: JSON.stringify({ current: [], available: [] }),
-    },
-  ]);
+  const gameRepository = {
+    getGame: jest.fn().mockResolvedValue({
+      code: 'AAAA',
+      players: {
+        current: [],
+        available: [],
+      },
+    }),
+  };
 
-  const actual = await mafia(req, res);
+  const playerRepository = {
+    addPlayer: jest.fn().mockResolvedValue({
+      id: -1,
+      role: 'Empty',
+      name: req.body.name,
+      session: req.body.session,
+    }),
+  };
+
+  const actual = await mafia(req, res, gameRepository, playerRepository);
 
   expect(actual.statusCode).toEqual(200);
   expect(actual.json).toEqual(expected);
@@ -99,13 +113,24 @@ test('Returns existing player when found', async () => {
     description: roleDescriptions.Cop,
   });
 
-  mockMySql.setMockDbResonse([
-    {
-      players: JSON.stringify({ current: [currentPlayer], available: [] }),
-    },
-  ]);
+  const gameRepository = {
+    getGame: jest.fn().mockResolvedValue({
+      code: 'AAAA',
+      players: {
+        current: [currentPlayer],
+        available: [],
+      },
+    }),
+  };
 
-  const actual = await mafia(req, res);
+  const playerRepository = {
+    addPlayer: jest.fn().mockResolvedValue({
+      role: 'Cop',
+      description: roleDescriptions.Cop,
+    }),
+  };
+
+  const actual = await mafia(req, res, gameRepository, playerRepository);
 
   expect(actual.statusCode).toEqual(200);
   expect(actual.json).toEqual(expected);
@@ -130,19 +155,36 @@ test('Returns 200 when no players available', async () => {
     session: 'guid',
   });
 
-  mockMySql.setMockDbResonse([
-    {
-      players: JSON.stringify({ current: [], available: [] }),
-    },
-  ]);
+  const gameRepository = {
+    getGame: jest.fn().mockResolvedValue({
+      code: 'AAAA',
+      players: {
+        current: [],
+        available: [],
+      },
+    }),
+  };
 
-  const actual = await mafia(req, res);
+  const playerRepository = {
+    addPlayer: jest.fn().mockResolvedValue({
+      role: 'Empty',
+    }),
+  };
+
+  const actual = await mafia(req, res, gameRepository, playerRepository);
 
   expect(actual.statusCode).toEqual(200);
   expect(actual.json).toEqual(expected);
 });
 
 test('Returns 500 on error', async () => {
+  const gameRepository = {
+    getGame: () => {
+      throw new Error('Failed to connect');
+    },
+  };
+  const playerRepository = {};
+
   const req = {
     query: {
       id: 'AAAA',
@@ -154,14 +196,7 @@ test('Returns 500 on error', async () => {
     },
   };
 
-  // Malformed JSON in DB
-  mockMySql.setMockDbResonse([
-    {
-      players: `${JSON.stringify({ current: [], available: [] })}}`,
-    },
-  ]);
-
-  const actual = await mafia(req, res);
+  const actual = await mafia(req, res, gameRepository, playerRepository);
 
   expect(actual.statusCode).toEqual(500);
 });

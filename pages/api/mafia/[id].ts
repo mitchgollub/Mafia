@@ -6,9 +6,6 @@ import { InternalServerError, BadRequest } from '../../../lib/error';
 import { NextApiRequest, NextApiResponse } from 'next';
 import Joi from '@hapi/joi';
 
-const gameRepository = new GameRepository();
-const playerRepository = new PlayerRepository();
-
 const schema = Joi.object({
   code: Joi.string().required(),
   name: Joi.string().required(),
@@ -18,6 +15,8 @@ const schema = Joi.object({
 export default async (
   req: NextApiRequest,
   res: NextApiResponse,
+  gameRepository: GameRepository = new GameRepository(),
+  playerRepository: PlayerRepository = new PlayerRepository(),
 ): Promise<NextApiResponse> => {
   try {
     console.log(`Request Body: ${JSON.stringify(req.body)}`);

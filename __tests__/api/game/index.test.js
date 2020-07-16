@@ -1,12 +1,17 @@
-import mysqlMock from 'serverless-mysql';
-import game from '../../../pages/api/game/index';
 import res from '../../../__mocks__/res';
-
-beforeEach(async () => {
-  mysqlMock.clearMockDbResponse();
-});
+import game from '../../../pages/api/game/index';
 
 test('Creates Game', async () => {
+  const gameRepository = {
+    createGame: jest.fn().mockResolvedValue({
+      code: 'AAAA',
+      players: {
+        current: [{ id: 1, name: 'YOU', role: 'Narrator', session: '' }],
+        available: [],
+      },
+    }),
+  };
+
   const req = {
     body: [
       {
@@ -17,18 +22,20 @@ test('Creates Game', async () => {
     ],
   };
 
-  mysqlMock.setMockDbResonse([]);
-
-  const response = await game(req, res);
+  const response = await game(req, res, gameRepository);
 
   expect(response.statusCode).toBe(200);
-  expect(response.json.code).toEqual(expect.stringMatching('^[^s]{4}$'));
-  expect(response.json.players).toEqual([
-    { id: 1, name: 'YOU', role: 'Narrator', session: '' },
-  ]);
+  expect(response.json).toMatchSnapshot();
 });
 
-test('Handles startingValues > 10', async () => {
+test('Returns 400 when startingValues > 10', async () => {
+  const gameRepository = {
+    createGame: jest.fn().mockResolvedValue({
+      code: 'AAAA',
+      players: { current: [], available: [] },
+    }),
+  };
+
   const req = {
     body: [
       {
@@ -39,14 +46,19 @@ test('Handles startingValues > 10', async () => {
     ],
   };
 
-  mysqlMock.setMockDbResonse([]);
-
-  const response = await game(req, res);
+  const response = await game(req, res, gameRepository);
 
   expect(response.statusCode).toBe(400);
 });
 
-test('Handles null startingValues', async () => {
+test('Returns 400 when null startingValues', async () => {
+  const gameRepository = {
+    createGame: jest.fn().mockResolvedValue({
+      code: 'AAAA',
+      players: { current: [], available: [] },
+    }),
+  };
+
   const req = {
     body: [
       {
@@ -57,14 +69,18 @@ test('Handles null startingValues', async () => {
     ],
   };
 
-  mysqlMock.setMockDbResonse([]);
-
-  const response = await game(req, res);
+  const response = await game(req, res, gameRepository);
 
   expect(response.statusCode).toBe(400);
 });
 
 test('Returns 500 on error', async () => {
+  const gameRepository = {
+    createGame: () => {
+      throw new Error('Failed to connect');
+    },
+  };
+
   const req = {
     body: [
       {
@@ -75,9 +91,7 @@ test('Returns 500 on error', async () => {
     ],
   };
 
-  mysqlMock.setMockDbResonse({ error: 'Error' });
-
-  const response = await game(req, res);
+  const response = await game(req, res, gameRepository);
 
   expect(response.statusCode).toBe(500);
 });
