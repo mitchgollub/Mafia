@@ -2,6 +2,11 @@ import roleDescriptions from '../../../configuration/roleDescriptions.json';
 import PlayerView from '../../../views/playerView';
 import mafia from '../../../pages/api/mafia/[id]';
 import res from '../../../__mocks__/res';
+import GameRepository from '../../../repositories/gameRepository';
+import PlayerRepository from '../../../repositories/playerRepository';
+
+jest.mock('../../../repositories/gameRepository');
+jest.mock('../../../repositories/playerRepository');
 
 test('Creates Player', async () => {
   const req = {
@@ -20,24 +25,20 @@ test('Creates Player', async () => {
     description: roleDescriptions.Cop,
   };
 
-  const gameRepository = {
-    getGame: jest.fn().mockResolvedValue({
-      code: 'AAAA',
-      players: {
-        current: [],
-        available: [{ role: 'Cop', id: 1 }],
-      },
-    }),
-  };
+  GameRepository.getGame.mockResolvedValue({
+    code: 'AAAA',
+    players: {
+      current: [],
+      available: [{ role: 'Cop', id: 1 }],
+    },
+  });
 
-  const playerRepository = {
-    addPlayer: jest.fn().mockResolvedValue({
-      role: 'Cop',
-      description: roleDescriptions.Cop,
-    }),
-  };
+  PlayerRepository.addPlayer.mockResolvedValue({
+    role: 'Cop',
+    description: roleDescriptions.Cop,
+  });
 
-  const actual = await mafia(req, res, gameRepository, playerRepository);
+  const actual = await mafia(req, res);
 
   expect(actual.statusCode).toEqual(200);
   expect(actual.json).toEqual(expected);
@@ -61,26 +62,22 @@ test('Returns Empty when no players available', async () => {
     session: 'guid',
   });
 
-  const gameRepository = {
-    getGame: jest.fn().mockResolvedValue({
-      code: 'AAAA',
-      players: {
-        current: [],
-        available: [],
-      },
-    }),
-  };
+  GameRepository.getGame.mockResolvedValue({
+    code: 'AAAA',
+    players: {
+      current: [],
+      available: [],
+    },
+  });
 
-  const playerRepository = {
-    addPlayer: jest.fn().mockResolvedValue({
-      id: -1,
-      role: 'Empty',
-      name: req.body.name,
-      session: req.body.session,
-    }),
-  };
+  PlayerRepository.addPlayer.mockResolvedValue({
+    id: -1,
+    role: 'Empty',
+    name: req.body.name,
+    session: req.body.session,
+  });
 
-  const actual = await mafia(req, res, gameRepository, playerRepository);
+  const actual = await mafia(req, res);
 
   expect(actual.statusCode).toEqual(200);
   expect(actual.json).toEqual(expected);
@@ -113,24 +110,20 @@ test('Returns existing player when found', async () => {
     description: roleDescriptions.Cop,
   });
 
-  const gameRepository = {
-    getGame: jest.fn().mockResolvedValue({
-      code: 'AAAA',
-      players: {
-        current: [currentPlayer],
-        available: [],
-      },
-    }),
-  };
+  GameRepository.getGame.mockResolvedValue({
+    code: 'AAAA',
+    players: {
+      current: [currentPlayer],
+      available: [],
+    },
+  });
 
-  const playerRepository = {
-    addPlayer: jest.fn().mockResolvedValue({
-      role: 'Cop',
-      description: roleDescriptions.Cop,
-    }),
-  };
+  PlayerRepository.addPlayer.mockResolvedValue({
+    role: 'Cop',
+    description: roleDescriptions.Cop,
+  });
 
-  const actual = await mafia(req, res, gameRepository, playerRepository);
+  const actual = await mafia(req, res);
 
   expect(actual.statusCode).toEqual(200);
   expect(actual.json).toEqual(expected);
@@ -155,35 +148,63 @@ test('Returns 200 when no players available', async () => {
     session: 'guid',
   });
 
-  const gameRepository = {
-    getGame: jest.fn().mockResolvedValue({
-      code: 'AAAA',
-      players: {
-        current: [],
-        available: [],
-      },
-    }),
-  };
+  GameRepository.getGame.mockResolvedValue({
+    code: 'AAAA',
+    players: {
+      current: [],
+      available: [],
+    },
+  });
 
-  const playerRepository = {
-    addPlayer: jest.fn().mockResolvedValue({
-      role: 'Empty',
-    }),
-  };
+  PlayerRepository.addPlayer.mockResolvedValue({
+    role: 'Empty',
+  });
 
-  const actual = await mafia(req, res, gameRepository, playerRepository);
+  const actual = await mafia(req, res);
 
   expect(actual.statusCode).toEqual(200);
   expect(actual.json).toEqual(expected);
 });
 
-test('Returns 500 on error', async () => {
-  const gameRepository = {
-    getGame: () => {
-      throw new Error('Failed to connect');
+test('Returns 400 when request is invalid', async () => {
+  const req = {
+    query: {
+      id: 'AAAA',
+    },
+    body: {
+      name: 'Mitch',
+      session: 'guid',
     },
   };
-  const playerRepository = {};
+
+  const response = await mafia(req, res);
+
+  expect(response.statusCode).toBe(400);
+});
+
+test("Returns 400 when game can't be found", async () => {
+  const req = {
+    query: {
+      id: 'AAAA',
+    },
+    body: {
+      code: 'AAAA',
+      name: 'Mitch',
+      session: 'guid',
+    },
+  };
+
+  GameRepository.getGame.mockResolvedValue(null);
+
+  const response = await mafia(req, res);
+
+  expect(response.statusCode).toBe(400);
+});
+
+test('Returns 500 on error', async () => {
+  GameRepository.getGame.mockImplementation(() => {
+    throw new Error('Failed to connect');
+  });
 
   const req = {
     query: {
@@ -196,7 +217,7 @@ test('Returns 500 on error', async () => {
     },
   };
 
-  const actual = await mafia(req, res, gameRepository, playerRepository);
+  const actual = await mafia(req, res);
 
   expect(actual.statusCode).toEqual(500);
 });

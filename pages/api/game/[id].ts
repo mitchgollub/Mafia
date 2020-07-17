@@ -6,12 +6,11 @@ import { BadRequest, InternalServerError } from '../../../lib/error';
 export default async (
   req: NextApiRequest,
   res: NextApiResponse<GameView | null>,
-  gameRepository: GameRepository = new GameRepository(),
 ): Promise<NextApiResponse<GameView | null>> => {
   try {
     console.log(`id: ${req.query.id}`);
 
-    const game = await gameRepository.getGame(req.query.id as string);
+    const game = await GameRepository.getGame(req.query.id as string);
 
     if (!game) {
       return BadRequest(res, 'Could not find Game');

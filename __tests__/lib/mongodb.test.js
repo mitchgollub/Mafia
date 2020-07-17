@@ -1,14 +1,12 @@
 import MongoClient from 'mongodb';
 import sanitize from 'mongo-sanitize';
-import { MongoDb } from '../../lib/mongodb';
+import MongoDb from '../../lib/mongodb';
 import Game from '../../models/game';
 
 jest.mock('mongodb');
 jest.mock('mongo-sanitize');
 
-let mongoDb;
-
-beforeAll(async () => {
+beforeEach(async () => {
   MongoClient.connect.mockResolvedValue({
     db: jest.fn().mockReturnValue({
       collection: jest.fn().mockReturnValue({
@@ -21,23 +19,37 @@ beforeAll(async () => {
   });
 
   sanitize.mockImplementation((request) => request);
-  mongoDb = new MongoDb();
 });
 
 test('insertGameDocument returns query results', async () => {
-  const actual = await mongoDb.insertGameDocument(new Game());
+  const actual = await MongoDb.insertGameDocument(new Game());
 
   expect(actual).toMatchSnapshot();
 });
 
 test('findGameDocument returns query results', async () => {
-  const actual = await mongoDb.findGameDocument('123');
+  MongoClient.connect.mockResolvedValue({
+    db: jest.fn().mockReturnValue({
+      collection: jest.fn().mockReturnValue({
+        findOne: jest.fn().mockResolvedValue({ code: '123' }),
+      }),
+    }),
+    close: jest.fn(),
+  });
+
+  const actual = await MongoDb.findGameDocument('123');
 
   expect(actual).toMatchSnapshot();
 });
 
+test('findGameDocument returns null if no GameDocument is found', async () => {
+  const actual = await MongoDb.findGameDocument('123');
+
+  expect(actual).toBeNull();
+});
+
 test('updateGameDocument returns query results', async () => {
-  const actual = await mongoDb.updateGameDocument(new Game());
+  const actual = await MongoDb.updateGameDocument(new Game());
 
   expect(actual).toMatchSnapshot();
 });

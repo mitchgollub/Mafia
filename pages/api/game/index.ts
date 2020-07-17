@@ -15,7 +15,6 @@ const schema = Joi.array().items(
 export default async (
   req: NextApiRequest,
   res: NextApiResponse<GameView | null>,
-  gameRepository: GameRepository = new GameRepository(),
 ): Promise<NextApiResponse> => {
   try {
     console.log(`request: ${JSON.stringify(req.body)}`);
@@ -26,11 +25,7 @@ export default async (
       return BadRequest(res, error.message);
     }
 
-    const game = await gameRepository.createGame(req.body);
-
-    if (!game) {
-      return BadRequest(res, 'Could not create game');
-    }
+    const game = await GameRepository.createGame(req.body);
 
     res.status(200).json(
       new GameView({

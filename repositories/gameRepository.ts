@@ -1,14 +1,12 @@
 import Game from '../models/game';
 import AvailableRole from '../models/availableRole';
 import GameRequestRole from '../models/gameRequestRole';
-import { MongoDb } from '../lib/mongodb';
+import MongoDb from '../lib/mongodb';
 
-const client = new MongoDb();
-
-export default class GameRepository {
-  createGame = async function createGame(
+export default {
+  createGame: async function createGame(
     roles: GameRequestRole[],
-  ): Promise<Game | null> {
+  ): Promise<Game> {
     let code = '';
     const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
     const charactersLength = characters.length;
@@ -32,12 +30,12 @@ export default class GameRepository {
 
     const game = new Game({ code, players });
 
-    await client.insertGameDocument(game);
+    await MongoDb.insertGameDocument(game);
 
     return game;
-  };
+  },
 
-  getGame = async function getGame(code: string): Promise<Game | null> {
-    return await client.findGameDocument(code);
-  };
-}
+  getGame: async function getGame(code: string): Promise<Game | null> {
+    return await MongoDb.findGameDocument(code);
+  },
+};

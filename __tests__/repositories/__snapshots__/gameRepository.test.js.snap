@@ -1,0 +1,101 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`GameRepository Creates Game 1`] = `
+Game {
+  "code": "MMMM",
+  "players": Object {
+    "available": Array [
+      AvailableRole {
+        "id": 2,
+        "role": "Cop",
+      },
+      AvailableRole {
+        "id": 3,
+        "role": "Mafia",
+      },
+      AvailableRole {
+        "id": 4,
+        "role": "Mafia",
+      },
+      AvailableRole {
+        "id": 5,
+        "role": "Doctor",
+      },
+      AvailableRole {
+        "id": 6,
+        "role": "Town Watch",
+      },
+      AvailableRole {
+        "id": 7,
+        "role": "Townsfolk",
+      },
+      AvailableRole {
+        "id": 8,
+        "role": "Townsfolk",
+      },
+      AvailableRole {
+        "id": 9,
+        "role": "Townsfolk",
+      },
+    ],
+    "current": Array [
+      Object {
+        "id": 1,
+        "name": "YOU",
+        "role": "Narrator",
+        "session": "",
+      },
+    ],
+  },
+}
+`;
+
+exports[`GameRepository Gets Game 1`] = `
+Object {
+  "code": "MMMM",
+  "players": Object {
+    "available": Array [
+      Object {
+        "id": 2,
+        "role": "Cop",
+      },
+      Object {
+        "id": 3,
+        "role": "Mafia",
+      },
+      Object {
+        "id": 4,
+        "role": "Mafia",
+      },
+      Object {
+        "id": 5,
+        "role": "Doctor",
+      },
+      Object {
+        "id": 6,
+        "role": "Town Watch",
+      },
+      Object {
+        "id": 7,
+        "role": "Townsfolk",
+      },
+      Object {
+        "id": 8,
+        "role": "Townsfolk",
+      },
+      Object {
+        "id": 9,
+        "role": "Townsfolk",
+      },
+    ],
+    "current": Array [
+      Object {
+        "id": 1,
+        "name": "YOU",
+        "role": "Narrator",
+        "session": "",
+      },
+    ],
+  },
+}
+`;

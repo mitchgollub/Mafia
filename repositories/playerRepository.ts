@@ -2,12 +2,10 @@ import Player from '../models/player';
 import roleDescriptions from '../configuration/roleDescriptions.json';
 import Game from '../models/game';
 import PlayerRequest from '../models/playerRequest';
-import { MongoDb } from '../lib/mongodb';
+import MongoDb from '../lib/mongodb';
 
-const client = new MongoDb();
-
-export default class PlayerRepository {
-  addPlayer = async function addPlayer(
+export default {
+  addPlayer: async function addPlayer(
     game: Game,
     playerRequest: PlayerRequest,
   ): Promise<Player> {
@@ -49,12 +47,12 @@ export default class PlayerRepository {
 
     players.current.push(newPlayer);
 
-    client.updateGameDocument(new Game({ code: game.code, players }));
+    MongoDb.updateGameDocument(new Game({ code, players }));
 
     // Description does not need to be stored in db
     newPlayer.description =
       roleDescriptions[selected.role as keyof typeof roleDescriptions];
 
     return newPlayer;
-  };
-}
+  },
+};

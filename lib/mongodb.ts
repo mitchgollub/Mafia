@@ -5,19 +5,25 @@ import sanitize from 'mongo-sanitize';
 const mongoHost = process.env.MONGO_HOST as string;
 const mongoDb = process.env.MONGO_DB as string;
 
-export class MongoDb {
+const connect = async function (): Promise<MongoClient.MongoClient> {
+  return await MongoClient.connect(mongoHost, {
+    useUnifiedTopology: true,
+  });
+};
+
+export default {
   async insertGameDocument(document: Game): Promise<Game> {
-    const client = await this.connect();
+    const client = await connect();
     const collection = client.db(mongoDb).collection('games');
 
     const result = await collection.insertOne(sanitize(document));
 
     client.close();
     return document;
-  }
+  },
 
   async findGameDocument(query: string): Promise<Game | null> {
-    const client = await this.connect();
+    const client = await connect();
     const collection = client.db(mongoDb).collection('games');
     const result = await collection.findOne({
       code: sanitize(query.toUpperCase()),
@@ -29,10 +35,10 @@ export class MongoDb {
     }
 
     return null;
-  }
+  },
 
   async updateGameDocument(game: Game): Promise<Game> {
-    const client = await this.connect();
+    const client = await connect();
     const collection = client.db(mongoDb).collection('games');
     const result = await collection.updateOne(
       { code: sanitize(game?.code.toUpperCase()) },
@@ -42,11 +48,5 @@ export class MongoDb {
     client.close();
 
     return game;
-  }
-
-  private async connect(): Promise<MongoClient.MongoClient> {
-    return await MongoClient.connect(mongoHost, {
-      useUnifiedTopology: true,
-    });
-  }
-}
+  },
+};

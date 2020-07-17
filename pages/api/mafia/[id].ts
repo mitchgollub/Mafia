@@ -15,8 +15,6 @@ const schema = Joi.object({
 export default async (
   req: NextApiRequest,
   res: NextApiResponse,
-  gameRepository: GameRepository = new GameRepository(),
-  playerRepository: PlayerRepository = new PlayerRepository(),
 ): Promise<NextApiResponse> => {
   try {
     console.log(`Request Body: ${JSON.stringify(req.body)}`);
@@ -29,13 +27,13 @@ export default async (
 
     const playerRequest = new PlayerRequest(req.body);
 
-    const game = await gameRepository.getGame(playerRequest.code);
+    const game = await GameRepository.getGame(playerRequest.code);
 
     if (!game) {
       return BadRequest(res, 'Could not find Game');
     }
 
-    const player = await playerRepository.addPlayer(game, playerRequest);
+    const player = await PlayerRepository.addPlayer(game, playerRequest);
 
     res.status(200).json(
       new PlayerView({
