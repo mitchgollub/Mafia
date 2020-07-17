@@ -6,9 +6,6 @@ import { InternalServerError, BadRequest } from '../../../lib/error';
 import { NextApiRequest, NextApiResponse } from 'next';
 import Joi from '@hapi/joi';
 
-const gameRepository = new GameRepository();
-const playerRepository = new PlayerRepository();
-
 const schema = Joi.object({
   code: Joi.string().required(),
   name: Joi.string().required(),
@@ -30,13 +27,13 @@ export default async (
 
     const playerRequest = new PlayerRequest(req.body);
 
-    const game = await gameRepository.getGame(playerRequest.code);
+    const game = await GameRepository.getGame(playerRequest.code);
 
     if (!game) {
       return BadRequest(res, 'Could not find Game');
     }
 
-    const player = await playerRepository.addPlayer(game, playerRequest);
+    const player = await PlayerRepository.addPlayer(game, playerRequest);
 
     res.status(200).json(
       new PlayerView({

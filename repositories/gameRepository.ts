@@ -1,13 +1,12 @@
 import Game from '../models/game';
-import { query } from '../lib/db';
-import escape from 'sql-template-strings';
 import AvailableRole from '../models/availableRole';
 import GameRequestRole from '../models/gameRequestRole';
+import MongoDb from '../lib/mongodb';
 
-export default class GameRepository {
-  createGame = async function createGame(
+export default {
+  createGame: async function createGame(
     roles: GameRequestRole[],
-  ): Promise<Game | null> {
+  ): Promise<Game> {
     let code = '';
     const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
     const charactersLength = characters.length;
@@ -29,26 +28,14 @@ export default class GameRepository {
       available,
     };
 
-    const resp = await query(escape`INSERT INTO Games(game_code, players)
-        VALUES(${code}, ${JSON.stringify(players)})`);
+    const game = new Game({ code, players });
 
-    if (!resp) {
-      return null;
-    }
+    await MongoDb.insertGameDocument(game);
 
-    return new Game({ code, players });
-  };
+    return game;
+  },
 
-  getGame = async function getGame(code: string): Promise<Game | null> {
-    const resp = await query(
-      escape`SELECT players FROM Games WHERE game_code = ${code}`,
-    );
-
-    if (resp && resp.length && resp[0] && resp[0].players) {
-      const players = JSON.parse(resp[0].players);
-      return new Game({ code, players });
-    }
-
-    return null;
-  };
-}
+  getGame: async function getGame(code: string): Promise<Game | null> {
+    return await MongoDb.findGameDocument(code);
+  },
+};

@@ -1,12 +1,11 @@
-import escape from 'sql-template-strings';
 import Player from '../models/player';
 import roleDescriptions from '../configuration/roleDescriptions.json';
-import { query } from '../lib/db';
 import Game from '../models/game';
 import PlayerRequest from '../models/playerRequest';
+import MongoDb from '../lib/mongodb';
 
-export default class PlayerRepository {
-  addPlayer = async function addPlayer(
+export default {
+  addPlayer: async function addPlayer(
     game: Game,
     playerRequest: PlayerRequest,
   ): Promise<Player> {
@@ -48,16 +47,12 @@ export default class PlayerRepository {
 
     players.current.push(newPlayer);
 
-    await query(
-      escape`UPDATE Games SET players=${JSON.stringify(
-        players,
-      )} WHERE game_code = ${code}`,
-    );
+    MongoDb.updateGameDocument(new Game({ code, players }));
 
     // Description does not need to be stored in db
     newPlayer.description =
       roleDescriptions[selected.role as keyof typeof roleDescriptions];
 
     return newPlayer;
-  };
-}
+  },
+};

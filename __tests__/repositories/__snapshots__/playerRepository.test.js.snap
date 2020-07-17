@@ -1,0 +1,31 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`PlayerRepository Adds Player 1`] = `
+Player {
+  "description": "Doctors have the ability to save other players from a Mafia murder.  At Night Time, the narrator will direct you to select one player to save.  If you were successful, the narrator will declare that no one was murdered.",
+  "id": 5,
+  "name": "Mitch",
+  "role": "Doctor",
+  "session": "0000-0000",
+}
+`;
+
+exports[`PlayerRepository Adds Player Returns Empty Player if none available 1`] = `
+Player {
+  "description": undefined,
+  "id": -1,
+  "name": "Mitch",
+  "role": "Empty",
+  "session": "0000-0000",
+}
+`;
+
+exports[`PlayerRepository Adds Player Returns Existing Player 1`] = `
+Object {
+  "description": "Doctors have the ability to save other players from a Mafia murder.  At Night Time, the narrator will direct you to select one player to save.  If you were successful, the narrator will declare that no one was murdered.",
+  "id": 5,
+  "name": "Mitch",
+  "role": "Doctor",
+  "session": "0000-0000",
+}
+`;

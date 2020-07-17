@@ -1,13 +1,12 @@
 import roleDescriptions from '../../../configuration/roleDescriptions.json';
 import PlayerView from '../../../views/playerView';
-
-import mockMySql from 'serverless-mysql';
 import mafia from '../../../pages/api/mafia/[id]';
 import res from '../../../__mocks__/res';
+import GameRepository from '../../../repositories/gameRepository';
+import PlayerRepository from '../../../repositories/playerRepository';
 
-beforeEach(() => {
-  mockMySql.clearMockDbResponse();
-});
+jest.mock('../../../repositories/gameRepository');
+jest.mock('../../../repositories/playerRepository');
 
 test('Creates Player', async () => {
   const req = {
@@ -26,15 +25,18 @@ test('Creates Player', async () => {
     description: roleDescriptions.Cop,
   };
 
-  mockMySql.setMockDbResonse([
-    {
-      players: JSON.stringify({
-        current: [],
-        available: [{ role: 'Cop', id: 1 }],
-      }),
+  GameRepository.getGame.mockResolvedValue({
+    code: 'AAAA',
+    players: {
+      current: [],
+      available: [{ role: 'Cop', id: 1 }],
     },
-  ]);
-  mockMySql.setMockDbResonse([]);
+  });
+
+  PlayerRepository.addPlayer.mockResolvedValue({
+    role: 'Cop',
+    description: roleDescriptions.Cop,
+  });
 
   const actual = await mafia(req, res);
 
@@ -60,11 +62,20 @@ test('Returns Empty when no players available', async () => {
     session: 'guid',
   });
 
-  mockMySql.setMockDbResonse([
-    {
-      players: JSON.stringify({ current: [], available: [] }),
+  GameRepository.getGame.mockResolvedValue({
+    code: 'AAAA',
+    players: {
+      current: [],
+      available: [],
     },
-  ]);
+  });
+
+  PlayerRepository.addPlayer.mockResolvedValue({
+    id: -1,
+    role: 'Empty',
+    name: req.body.name,
+    session: req.body.session,
+  });
 
   const actual = await mafia(req, res);
 
@@ -99,11 +110,18 @@ test('Returns existing player when found', async () => {
     description: roleDescriptions.Cop,
   });
 
-  mockMySql.setMockDbResonse([
-    {
-      players: JSON.stringify({ current: [currentPlayer], available: [] }),
+  GameRepository.getGame.mockResolvedValue({
+    code: 'AAAA',
+    players: {
+      current: [currentPlayer],
+      available: [],
     },
-  ]);
+  });
+
+  PlayerRepository.addPlayer.mockResolvedValue({
+    role: 'Cop',
+    description: roleDescriptions.Cop,
+  });
 
   const actual = await mafia(req, res);
 
@@ -130,11 +148,17 @@ test('Returns 200 when no players available', async () => {
     session: 'guid',
   });
 
-  mockMySql.setMockDbResonse([
-    {
-      players: JSON.stringify({ current: [], available: [] }),
+  GameRepository.getGame.mockResolvedValue({
+    code: 'AAAA',
+    players: {
+      current: [],
+      available: [],
     },
-  ]);
+  });
+
+  PlayerRepository.addPlayer.mockResolvedValue({
+    role: 'Empty',
+  });
 
   const actual = await mafia(req, res);
 
@@ -142,7 +166,23 @@ test('Returns 200 when no players available', async () => {
   expect(actual.json).toEqual(expected);
 });
 
-test('Returns 500 on error', async () => {
+test('Returns 400 when request is invalid', async () => {
+  const req = {
+    query: {
+      id: 'AAAA',
+    },
+    body: {
+      name: 'Mitch',
+      session: 'guid',
+    },
+  };
+
+  const response = await mafia(req, res);
+
+  expect(response.statusCode).toBe(400);
+});
+
+test("Returns 400 when game can't be found", async () => {
   const req = {
     query: {
       id: 'AAAA',
@@ -154,12 +194,28 @@ test('Returns 500 on error', async () => {
     },
   };
 
-  // Malformed JSON in DB
-  mockMySql.setMockDbResonse([
-    {
-      players: `${JSON.stringify({ current: [], available: [] })}}`,
+  GameRepository.getGame.mockResolvedValue(null);
+
+  const response = await mafia(req, res);
+
+  expect(response.statusCode).toBe(400);
+});
+
+test('Returns 500 on error', async () => {
+  GameRepository.getGame.mockImplementation(() => {
+    throw new Error('Failed to connect');
+  });
+
+  const req = {
+    query: {
+      id: 'AAAA',
     },
-  ]);
+    body: {
+      code: 'AAAA',
+      name: 'Mitch',
+      session: 'guid',
+    },
+  };
 
   const actual = await mafia(req, res);
 

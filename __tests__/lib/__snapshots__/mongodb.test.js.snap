@@ -1,0 +1,31 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`findGameDocument returns query results 1`] = `
+Game {
+  "code": "123",
+  "players": Object {
+    "available": Array [],
+    "current": Array [],
+  },
+}
+`;
+
+exports[`insertGameDocument returns query results 1`] = `
+Game {
+  "code": "",
+  "players": Object {
+    "available": Array [],
+    "current": Array [],
+  },
+}
+`;
+
+exports[`updateGameDocument returns query results 1`] = `
+Game {
+  "code": "",
+  "players": Object {
+    "available": Array [],
+    "current": Array [],
+  },
+}
+`;

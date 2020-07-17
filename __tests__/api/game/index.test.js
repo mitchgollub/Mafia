@@ -1,12 +1,18 @@
-import mysqlMock from 'serverless-mysql';
-import game from '../../../pages/api/game/index';
 import res from '../../../__mocks__/res';
+import game from '../../../pages/api/game/index';
+import GameRepository from '../../../repositories/gameRepository';
 
-beforeEach(async () => {
-  mysqlMock.clearMockDbResponse();
-});
+jest.mock('../../../repositories/gameRepository');
 
 test('Creates Game', async () => {
+  GameRepository.createGame.mockResolvedValue({
+    code: 'AAAA',
+    players: {
+      current: [{ id: 1, name: 'YOU', role: 'Narrator', session: '' }],
+      available: [],
+    },
+  });
+
   const req = {
     body: [
       {
@@ -17,18 +23,18 @@ test('Creates Game', async () => {
     ],
   };
 
-  mysqlMock.setMockDbResonse([]);
-
   const response = await game(req, res);
 
   expect(response.statusCode).toBe(200);
-  expect(response.json.code).toEqual(expect.stringMatching('^[^s]{4}$'));
-  expect(response.json.players).toEqual([
-    { id: 1, name: 'YOU', role: 'Narrator', session: '' },
-  ]);
+  expect(response.json).toMatchSnapshot();
 });
 
-test('Handles startingValues > 10', async () => {
+test('Returns 400 when startingValues > 10', async () => {
+  GameRepository.createGame.mockResolvedValue({
+    code: 'AAAA',
+    players: { current: [], available: [] },
+  });
+
   const req = {
     body: [
       {
@@ -39,14 +45,17 @@ test('Handles startingValues > 10', async () => {
     ],
   };
 
-  mysqlMock.setMockDbResonse([]);
-
   const response = await game(req, res);
 
   expect(response.statusCode).toBe(400);
 });
 
-test('Handles null startingValues', async () => {
+test('Returns 400 when null startingValues', async () => {
+  GameRepository.createGame.mockResolvedValue({
+    code: 'AAAA',
+    players: { current: [], available: [] },
+  });
+
   const req = {
     body: [
       {
@@ -57,7 +66,26 @@ test('Handles null startingValues', async () => {
     ],
   };
 
-  mysqlMock.setMockDbResonse([]);
+  const response = await game(req, res);
+
+  expect(response.statusCode).toBe(400);
+});
+
+test('Returns 400 when game failed to create', async () => {
+  GameRepository.createGame.mockResolvedValue({
+    code: 'AAAA',
+    players: { current: [], available: [] },
+  });
+
+  const req = {
+    body: [
+      {
+        role: 'Cop',
+        roleName: 'Cops',
+        startingValue: null,
+      },
+    ],
+  };
 
   const response = await game(req, res);
 
@@ -65,6 +93,10 @@ test('Handles null startingValues', async () => {
 });
 
 test('Returns 500 on error', async () => {
+  GameRepository.createGame.mockImplementation(() => {
+    throw new Error('Failed to connect');
+  });
+
   const req = {
     body: [
       {
@@ -74,8 +106,6 @@ test('Returns 500 on error', async () => {
       },
     ],
   };
-
-  mysqlMock.setMockDbResonse({ error: 'Error' });
 
   const response = await game(req, res);
 

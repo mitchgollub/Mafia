@@ -4,8 +4,6 @@ import { BadRequest, InternalServerError } from '../../../lib/error';
 import GameView from '../../../views/gameView';
 import Joi from '@hapi/joi';
 
-const gameRepository = new GameRepository();
-
 const schema = Joi.array().items(
   Joi.object({
     role: Joi.string().required(),
@@ -27,11 +25,7 @@ export default async (
       return BadRequest(res, error.message);
     }
 
-    const game = await gameRepository.createGame(req.body);
-
-    if (!game) {
-      return BadRequest(res, 'Could not create game');
-    }
+    const game = await GameRepository.createGame(req.body);
 
     res.status(200).json(
       new GameView({
