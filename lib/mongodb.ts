@@ -18,7 +18,7 @@ export default {
 
     const result = await collection.insertOne(sanitize(document));
 
-    client.close();
+    await client.close();
     return document;
   },
 
@@ -28,7 +28,7 @@ export default {
     const result = await collection.findOne({
       code: sanitize(query.toUpperCase()),
     });
-    client.close();
+    await client.close();
 
     if (result) {
       return new Game(result);
@@ -45,7 +45,7 @@ export default {
       { $set: sanitize(game) },
     );
 
-    client.close();
+    await client.close();
 
     return game;
   },
