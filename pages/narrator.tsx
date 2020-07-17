@@ -59,7 +59,7 @@ export default class Mafia extends Component {
 
   async checkGameStatus(): Promise<void> {
     this.setState({ refresh: true });
-    const game = await ky.post(`/api/game/${this.state.game.code}`).json();
+    const game = await ky.get(`/api/game/${this.state.game.code}`).json();
     this.setState({ game, refresh: false });
   }
 
