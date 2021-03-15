@@ -4,11 +4,16 @@ import sanitize from 'mongo-sanitize';
 
 const mongoHost = process.env.MONGO_HOST as string;
 const mongoDb = process.env.MONGO_DB as string;
+let cachedConnection: MongoClient.MongoClient;
 
 const connect = async function (): Promise<MongoClient.MongoClient> {
-  return await MongoClient.connect(mongoHost, {
-    useUnifiedTopology: true,
-  });
+  if (!cachedConnection || !cachedConnection.isConnected()) {
+    cachedConnection = await MongoClient.connect(mongoHost, {
+      useUnifiedTopology: true,
+    });
+  }
+
+  return cachedConnection;
 };
 
 export default {
@@ -18,7 +23,6 @@ export default {
 
     const result = await collection.insertOne(sanitize(document));
 
-    await client.close();
     return document;
   },
 
@@ -28,7 +32,6 @@ export default {
     const result = await collection.findOne({
       code: sanitize(query.toUpperCase()),
     });
-    await client.close();
 
     if (result) {
       return new Game(result);
@@ -44,8 +47,6 @@ export default {
       { code: sanitize(game?.code.toUpperCase()) },
       { $set: sanitize(game) },
     );
-
-    await client.close();
 
     return game;
   },
