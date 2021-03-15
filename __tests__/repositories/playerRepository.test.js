@@ -1,5 +1,4 @@
 import PlayerRepository from '../../repositories/playerRepository';
-import MongoDb from '../../lib/mongodb';
 
 jest.mock('../../lib/mongodb');
 Math.random = jest.fn(() => 0.48);
