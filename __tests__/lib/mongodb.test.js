@@ -16,6 +16,7 @@ beforeEach(async () => {
       }),
     }),
     close: jest.fn(),
+    isConnected: jest.fn().mockReturnValue(false),
   });
 
   sanitize.mockImplementation((request) => request);
@@ -35,6 +36,7 @@ test('findGameDocument returns query results', async () => {
       }),
     }),
     close: jest.fn(),
+    isConnected: jest.fn().mockReturnValue(false),
   });
 
   const actual = await MongoDb.findGameDocument('123');
